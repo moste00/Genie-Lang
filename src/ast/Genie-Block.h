@@ -7,5 +7,7 @@ namespace genie {
         std::vector<GenieModule::ModuleElem> elems;
 
         GenieBlock(std::vector<GenieModule::ModuleElem>&);
+
+        void free();
     };
 }

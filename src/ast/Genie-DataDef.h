@@ -13,28 +13,13 @@ namespace genie {
 
         std::string name;
 
-        struct TypeAnnotation {
-            enum class TypeType {REF,DEF,NONE};
-            union _ {
-                GenieType* typdef;
-                std::string typref;
-                _(GenieType*);
-                _(std::string);
-                _(){}
-                ~_(){}
-            } ref_or_def;
-            TypeType typ;
 
-            TypeAnnotation();
-            TypeAnnotation(std::string);
-            TypeAnnotation(GenieType*);
-            TypeAnnotation(const TypeAnnotation&);
-            TypeAnnotation& operator=(const TypeAnnotation&);
-        };
-        TypeAnnotation type;
+        std::string type;
 
         GenieExpr initializer;
 
-        GenieData(MutabilitySpecifier, std::string, const TypeAnnotation&, GenieExpr);
+        GenieData(MutabilitySpecifier,const std::string&, const std::string&, GenieExpr);
+
+        void free();
     };
 }

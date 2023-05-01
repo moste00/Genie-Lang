@@ -18,9 +18,6 @@ add_executable(Genie
                 "src/ast/Genie-FunctionDef.cpp"
                 "src/ast/Genie-TypeDef.cpp"
                 "src/ast/Genie-Module.cpp"
-                "src/ast/Genie-Program.cpp")
-
-
-
+                "src/ast/Genie-Program.cpp" src/parser-invoker/Genie-ParserInvoker.h src/parser-invoker/Genie-AstWalker.h src/pretty-printers/Genie-JsonAstPrinter.cpp src/pretty-printers/Genie-JsonAstPrinter.h src/parser-invoker/bison-invoker/Genie-BisonInvoker.cpp src/parser-invoker/bison-invoker/Genie-BisonInvoker.h)
 
 target_link_libraries(Genie "/usr/local/lib/libgmp.a" "/usr/local/lib/libgmpxx.a")

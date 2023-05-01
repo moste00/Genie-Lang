@@ -9,7 +9,7 @@ namespace genie {
             std::string name;
             std::vector<std::string> tags;
 
-            SumType(std::string,std::vector<std::string>);
+            SumType(std::string&,std::vector<std::string>&);
         };
 
         union {
@@ -17,5 +17,7 @@ namespace genie {
         } t;
 
         GenieType(SumType*);
+
+        void free();
     };
 }

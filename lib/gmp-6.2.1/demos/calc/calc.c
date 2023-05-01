@@ -32,7 +32,7 @@
    version 2.2 of Bison.  */
 
 /* C LALR(1) parser skeleton written by Richard Stallman, by
-   simplifying the original so-called "semantic" parser.  */
+   simplifying the original so-called "semantic-analysis" parser.  */
 
 /* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
    especially those whose name start with YY_ or yy_.  They are
@@ -1244,7 +1244,7 @@ yydestruct (const char *yymsg,
 /* The lookahead symbol.  */
 int yychar;
 
-/* The semantic value of the lookahead symbol.  */
+/* The semantic-analysis value of the lookahead symbol.  */
 YYSTYPE yylval;
 /* Number of syntax errors so far.  */
 int yynerrs;
@@ -1265,7 +1265,7 @@ yyparse (void)
 
     /* The stacks and their tools:
        'yyss': related to states.
-       'yyvs': related to semantic values.
+       'yyvs': related to semantic-analysis values.
 
        Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -1278,7 +1278,7 @@ yyparse (void)
     yy_state_t *yyss;
     yy_state_t *yyssp;
 
-    /* The semantic value stack.  */
+    /* The semantic-analysis value stack.  */
     YYSTYPE yyvsa[YYINITDEPTH];
     YYSTYPE *yyvs;
     YYSTYPE *yyvsp;
@@ -1288,7 +1288,7 @@ yyparse (void)
   int yyresult;
   /* Lookahead token as an internal (translated) token number.  */
   yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
-  /* The variables used to return semantic value and location from the
+  /* The variables used to return semantic-analysis value and location from the
      action routines.  */
   YYSTYPE yyval;
 
@@ -1773,11 +1773,11 @@ yyreduce:
 
       default: break;
     }
-  /* User semantic actions sometimes alter yychar, and that requires
+  /* User semantic-analysis actions sometimes alter yychar, and that requires
      that yytoken be updated with the new translation.  We take the
      approach of translating immediately before every use of yytoken.
-     One alternative is translating here after every semantic action,
-     but that translation would be missed if the semantic action invokes
+     One alternative is translating here after every semantic-analysis action,
+     but that translation would be missed if the semantic-analysis action invokes
      YYABORT, YYACCEPT, or YYERROR immediately after altering yychar or
      if it invokes YYBACKUP.  In the case of YYABORT or YYACCEPT, an
      incorrect destructor might then be invoked immediately.  In the
@@ -1810,7 +1810,7 @@ yyreduce:
 `--------------------------------------*/
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
-     user semantic actions for why this is necessary.  */
+     user semantic-analysis actions for why this is necessary.  */
   yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
@@ -1940,7 +1940,7 @@ yyreturn:
   if (yychar != YYEMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
-         user semantic actions for why this is necessary.  */
+         user semantic-analysis actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
                   yytoken, &yylval);

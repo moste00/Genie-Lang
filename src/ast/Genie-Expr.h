@@ -8,7 +8,7 @@ namespace genie {
 
     struct GenieExpr {
         enum class GenieExprType {
-            INT_TYPE,REAL_TYPE,BINARY_TYPE,NONE_TYPE
+            INT_TYPE,REAL_TYPE,BINARY_TYPE,IDENT_TYPE,NONE_TYPE
         };
         GenieExprType type;
 
@@ -16,6 +16,7 @@ namespace genie {
             GenieInt as_int;
             GenieReal* as_real;
             GenieBinaryExpr* as_bin;
+            std::string* as_ident;
             _(){}
             ~_(){}
         } e;
@@ -25,6 +26,7 @@ namespace genie {
         GenieExpr(const GenieInt&);
         GenieExpr(GenieReal*);
         GenieExpr(GenieBinaryExpr*);
+        GenieExpr(const std::string&);
 
         void free();
     };

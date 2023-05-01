@@ -31,6 +31,8 @@ namespace genie {
             ModuleElem(GenieData*);
             ModuleElem(GenieBlock*);
             ModuleElem(GenieFunction*);
+
+            void free();
         };
 
         enum class Type {SIMPLE_MODULE,COMPOUND_MODULE};
@@ -51,5 +53,7 @@ namespace genie {
 
         GenieModule(std::vector<ModuleElem>&);
         GenieModule(std::vector<GenieModule*>&);
+
+        void free();
     };
 }

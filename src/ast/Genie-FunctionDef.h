@@ -12,16 +12,20 @@ namespace genie {
 
         struct FunctionParam {
             std::string name;
-            GenieData::TypeAnnotation annot;
+            std::string type;
             GenieExpr init;
 
             FunctionParam();
             FunctionParam(const FunctionParam&);
-            FunctionParam(std::string,GenieData::TypeAnnotation,GenieExpr);
+            FunctionParam(const std::string&,const std::string&,GenieExpr);
+
+            void free();
         };
         std::vector<FunctionParam> params;
         GenieBlock* body;
 
         GenieFunction(std::string,std::vector<FunctionParam>&,GenieBlock*);
+
+        void free();
     };
 }

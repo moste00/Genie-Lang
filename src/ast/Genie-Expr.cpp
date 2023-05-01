@@ -34,6 +34,7 @@ namespace genie {
             }
             case GenieExprType::BINARY_TYPE: {
                 e.as_bin->free();
+                delete e.as_bin;
                 break;
             }
         }
@@ -44,4 +45,8 @@ namespace genie {
         e = copy.e;
     }
 
+    GenieExpr::GenieExpr(const string& id) {
+        type = GenieExprType::IDENT_TYPE;
+        e.as_ident = new std::string(id);
+    }
 }

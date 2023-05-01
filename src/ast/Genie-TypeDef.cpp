@@ -7,7 +7,12 @@ namespace genie {
         t.as_sum = sm;
     }
 
-    GenieType::SumType::SumType(std::string n, std::vector<std::string> ts) {
+    void GenieType::free() {
+        delete t.as_sum;
+        t.as_sum = nullptr;
+    }
+
+    GenieType::SumType::SumType(std::string& n, std::vector<std::string>& ts) {
         name = std::move(n);
         tags = std::move(ts);
     }

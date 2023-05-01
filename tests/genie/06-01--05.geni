@@ -1,0 +1,60 @@
+fun area r : int {
+	3.14159 * r**2
+}
+print[2*area[3]]
+1+12*3424**434%2131
+val x : int = 123**1323+1231/12312*132%123
+var y = x + 1
+
+val pi = 3.14159
+var r = 5
+var area = pi*r**2
+fun with_no_params {
+    val local1 : int
+    var local2 : real
+    {
+        val nested_local : int = local1
+        var local1 = local2
+    }
+}
+
+fun with_params x:int
+                y:real
+                z:int = 1
+                w = 1.0 {
+
+   x+y+z+w
+}
+// h4lllow kqw po40i  +  {{{ {{ { {{ { { { {
+var z = switch x {
+    case 0 {
+        1
+    }
+    case y {
+        x
+    }
+}
+
+for y = 1:100 step y+2 {
+    x = x + y
+}
+
+while x < y {
+    x = x + 1
+}
+
+if x is y {
+    print[4]
+}
+else {
+    if x < y {
+        print[0]
+    }
+    //else {
+    //    print[2]
+    //}
+}
+
+repeat {
+    y = y - 100
+} until x is y

@@ -45,7 +45,7 @@
 #ifndef YY_YY_GENIE_PARSER_HPP_INCLUDED
 # define YY_YY_GENIE_PARSER_HPP_INCLUDED
 // "%code requires" blocks.
-#line 21 "parser.y"
+#line 25 "parser.y"
 
     #include "../../ast/Genie-Ast.hpp"
 
@@ -94,7 +94,7 @@
 #else
 # define YY_CONSTEXPR
 #endif
-
+# include "location.hh"
 
 
 #ifndef YY_ATTRIBUTE_PURE
@@ -180,10 +180,10 @@
 
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
-#line 17 "parser.y"
+#line 20 "parser.y"
 namespace genie {
 #line 189 "Genie-Parser.hpp"
 
@@ -382,6 +382,14 @@ namespace genie {
     union union_type
     {
       // g_block
+      // g_switch_body
+      // g_cases
+      // g_case
+      // g_for_var_decl
+      // g_optional_else
+      // g_assign
+      // g_fun_call_args
+      // g_rest_of_fun_call_args
       char dummy1[sizeof (GenieBlock*)];
 
       // g_data_def
@@ -390,52 +398,53 @@ namespace genie {
       // g_data_def_mut_spec
       char dummy3[sizeof (GenieData::MutabilitySpecifier)];
 
-      // g_optional_type_decl
-      // g_type_decl
-      // g_type_ref_or_def
-      char dummy4[sizeof (GenieData::TypeAnnotation)];
-
       // g_expression
+      // g_any_expr
       // g_expr
+      // g_control_expr
       // g_optional_init_expr
-      char dummy5[sizeof (GenieExpr)];
+      char dummy4[sizeof (GenieExpr)];
 
       // g_func_def
-      char dummy6[sizeof (GenieFunction*)];
+      char dummy5[sizeof (GenieFunction*)];
 
       // g_param
-      char dummy7[sizeof (GenieFunction::FunctionParam)];
+      char dummy6[sizeof (GenieFunction::FunctionParam)];
 
       // g_source
-      char dummy8[sizeof (GenieModule*)];
+      char dummy7[sizeof (GenieModule*)];
 
       // g_module_element
-      char dummy9[sizeof (GenieModule::ModuleElem)];
+      char dummy8[sizeof (GenieModule::ModuleElem)];
 
       // g_type_def
-      char dummy10[sizeof (GenieType*)];
+      char dummy9[sizeof (GenieType*)];
 
       // g_sum_type
-      char dummy11[sizeof (GenieType::SumType*)];
+      char dummy10[sizeof (GenieType::SumType*)];
 
       // g_param_end
-      char dummy12[sizeof (char)];
+      char dummy11[sizeof (char)];
 
       // INT
       // REAL
       // ID
-      char dummy13[sizeof (std::string)];
+      // g_optional_type_decl
+      // g_type_decl
+      char dummy12[sizeof (std::string)];
 
       // g_module_elements
-      char dummy14[sizeof (std::vector<
+      char dummy13[sizeof (std::vector<
             GenieModule::ModuleElem>)];
 
       // g_optional_param_list
-      char dummy15[sizeof (std::vector<GenieFunction::FunctionParam>)];
+      // g_param_list
+      // g_rest_of_param_list
+      char dummy14[sizeof (std::vector<GenieFunction::FunctionParam>)];
 
       // g_variants
       // g_more_variants
-      char dummy16[sizeof (std::vector<std::string>)];
+      char dummy15[sizeof (std::vector<std::string>)];
     };
 
     /// The size of the largest semantic type.
@@ -455,19 +464,25 @@ namespace genie {
     /// Backward compatibility (Bison 3.8).
     typedef value_type semantic_type;
 
+    /// Symbol locations.
+    typedef location location_type;
 
     /// Syntax errors thrown from user actions.
     struct syntax_error : std::runtime_error
     {
-      syntax_error (const std::string& m)
+      syntax_error (const location_type& l, const std::string& m)
         : std::runtime_error (m)
+        , location (l)
       {}
 
       syntax_error (const syntax_error& s)
         : std::runtime_error (s.what ())
+        , location (s.location)
       {}
 
       ~syntax_error () YY_NOEXCEPT YY_NOTHROW;
+
+      location_type location;
     };
 
     /// Token kinds.
@@ -489,19 +504,39 @@ namespace genie {
     CLOSED_PAREN = 265,            // CLOSED_PAREN
     OPEN_CURLY = 266,              // OPEN_CURLY
     CLOSED_CURLY = 267,            // CLOSED_CURLY
-    EQUAL = 268,                   // EQUAL
-    COLON = 269,                   // COLON
-    COMMA = 270,                   // COMMA
-    VAR = 271,                     // VAR
-    VAL = 272,                     // VAL
-    FUN = 273,                     // FUN
-    SUM = 274,                     // SUM
-    ALT = 275,                     // ALT
-    G_EOL = 276,                   // G_EOL
-    UNKNOWN = 277,                 // UNKNOWN
-    INT = 278,                     // INT
-    REAL = 279,                    // REAL
-    ID = 280                       // ID
+    OPEN_SQ_BRACKET = 268,         // OPEN_SQ_BRACKET
+    CLOSED_SQ_BRACKET = 269,       // CLOSED_SQ_BRACKET
+    EQUAL = 270,                   // EQUAL
+    COLON = 271,                   // COLON
+    COMMA = 272,                   // COMMA
+    VAR = 273,                     // VAR
+    VAL = 274,                     // VAL
+    FUN = 275,                     // FUN
+    SUM = 276,                     // SUM
+    ALT = 277,                     // ALT
+    SWITCH = 278,                  // SWITCH
+    WHILE = 279,                   // WHILE
+    REP = 280,                     // REP
+    IF = 281,                      // IF
+    ELSE = 282,                    // ELSE
+    UNTIL = 283,                   // UNTIL
+    FOR = 284,                     // FOR
+    CASE = 285,                    // CASE
+    STEP = 286,                    // STEP
+    G_EOL = 287,                   // G_EOL
+    UNKNOWN = 288,                 // UNKNOWN
+    INT = 289,                     // INT
+    REAL = 290,                    // REAL
+    ID = 291,                      // ID
+    OR = 292,                      // OR
+    AND = 293,                     // AND
+    NOT = 294,                     // NOT
+    LESS_THAN = 295,               // LESS_THAN
+    GREATER_THAN = 296,            // GREATER_THAN
+    LESS_THAN_EQ = 297,            // LESS_THAN_EQ
+    GREATER_THAN_EQ = 298,         // GREATER_THAN_EQ
+    IS_EQUAL_TO = 299,             // IS_EQUAL_TO
+    IS_NOT_EQUAL_TO = 300          // IS_NOT_EQUAL_TO
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -518,7 +553,7 @@ namespace genie {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 26, ///< Number of tokens.
+        YYNTOKENS = 46, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -533,40 +568,71 @@ namespace genie {
         S_CLOSED_PAREN = 10,                     // CLOSED_PAREN
         S_OPEN_CURLY = 11,                       // OPEN_CURLY
         S_CLOSED_CURLY = 12,                     // CLOSED_CURLY
-        S_EQUAL = 13,                            // EQUAL
-        S_COLON = 14,                            // COLON
-        S_COMMA = 15,                            // COMMA
-        S_VAR = 16,                              // VAR
-        S_VAL = 17,                              // VAL
-        S_FUN = 18,                              // FUN
-        S_SUM = 19,                              // SUM
-        S_ALT = 20,                              // ALT
-        S_G_EOL = 21,                            // G_EOL
-        S_UNKNOWN = 22,                          // UNKNOWN
-        S_INT = 23,                              // INT
-        S_REAL = 24,                             // REAL
-        S_ID = 25,                               // ID
-        S_YYACCEPT = 26,                         // $accept
-        S_g_source = 27,                         // g_source
-        S_g_module_elements = 28,                // g_module_elements
-        S_g_module_element = 29,                 // g_module_element
-        S_g_expression = 30,                     // g_expression
-        S_g_expr = 31,                           // g_expr
-        S_g_block = 32,                          // g_block
-        S_g_data_def = 33,                       // g_data_def
-        S_g_data_def_mut_spec = 34,              // g_data_def_mut_spec
-        S_g_optional_type_decl = 35,             // g_optional_type_decl
-        S_g_type_decl = 36,                      // g_type_decl
-        S_g_type_ref_or_def = 37,                // g_type_ref_or_def
-        S_g_optional_init_expr = 38,             // g_optional_init_expr
-        S_g_func_def = 39,                       // g_func_def
-        S_g_optional_param_list = 40,            // g_optional_param_list
-        S_g_param = 41,                          // g_param
-        S_g_param_end = 42,                      // g_param_end
-        S_g_type_def = 43,                       // g_type_def
-        S_g_sum_type = 44,                       // g_sum_type
-        S_g_variants = 45,                       // g_variants
-        S_g_more_variants = 46                   // g_more_variants
+        S_OPEN_SQ_BRACKET = 13,                  // OPEN_SQ_BRACKET
+        S_CLOSED_SQ_BRACKET = 14,                // CLOSED_SQ_BRACKET
+        S_EQUAL = 15,                            // EQUAL
+        S_COLON = 16,                            // COLON
+        S_COMMA = 17,                            // COMMA
+        S_VAR = 18,                              // VAR
+        S_VAL = 19,                              // VAL
+        S_FUN = 20,                              // FUN
+        S_SUM = 21,                              // SUM
+        S_ALT = 22,                              // ALT
+        S_SWITCH = 23,                           // SWITCH
+        S_WHILE = 24,                            // WHILE
+        S_REP = 25,                              // REP
+        S_IF = 26,                               // IF
+        S_ELSE = 27,                             // ELSE
+        S_UNTIL = 28,                            // UNTIL
+        S_FOR = 29,                              // FOR
+        S_CASE = 30,                             // CASE
+        S_STEP = 31,                             // STEP
+        S_G_EOL = 32,                            // G_EOL
+        S_UNKNOWN = 33,                          // UNKNOWN
+        S_INT = 34,                              // INT
+        S_REAL = 35,                             // REAL
+        S_ID = 36,                               // ID
+        S_OR = 37,                               // OR
+        S_AND = 38,                              // AND
+        S_NOT = 39,                              // NOT
+        S_LESS_THAN = 40,                        // LESS_THAN
+        S_GREATER_THAN = 41,                     // GREATER_THAN
+        S_LESS_THAN_EQ = 42,                     // LESS_THAN_EQ
+        S_GREATER_THAN_EQ = 43,                  // GREATER_THAN_EQ
+        S_IS_EQUAL_TO = 44,                      // IS_EQUAL_TO
+        S_IS_NOT_EQUAL_TO = 45,                  // IS_NOT_EQUAL_TO
+        S_YYACCEPT = 46,                         // $accept
+        S_g_source = 47,                         // g_source
+        S_g_module_elements = 48,                // g_module_elements
+        S_g_module_element = 49,                 // g_module_element
+        S_g_expression = 50,                     // g_expression
+        S_g_any_expr = 51,                       // g_any_expr
+        S_g_expr = 52,                           // g_expr
+        S_g_control_expr = 53,                   // g_control_expr
+        S_g_block = 54,                          // g_block
+        S_g_switch_body = 55,                    // g_switch_body
+        S_g_cases = 56,                          // g_cases
+        S_g_case = 57,                           // g_case
+        S_g_for_var_decl = 58,                   // g_for_var_decl
+        S_g_optional_else = 59,                  // g_optional_else
+        S_g_assign = 60,                         // g_assign
+        S_g_data_def = 61,                       // g_data_def
+        S_g_data_def_mut_spec = 62,              // g_data_def_mut_spec
+        S_g_optional_type_decl = 63,             // g_optional_type_decl
+        S_g_type_decl = 64,                      // g_type_decl
+        S_g_optional_init_expr = 65,             // g_optional_init_expr
+        S_g_func_def = 66,                       // g_func_def
+        S_g_optional_param_list = 67,            // g_optional_param_list
+        S_g_param_list = 68,                     // g_param_list
+        S_g_rest_of_param_list = 69,             // g_rest_of_param_list
+        S_g_param = 70,                          // g_param
+        S_g_param_end = 71,                      // g_param_end
+        S_g_fun_call_args = 72,                  // g_fun_call_args
+        S_g_rest_of_fun_call_args = 73,          // g_rest_of_fun_call_args
+        S_g_type_def = 74,                       // g_type_def
+        S_g_sum_type = 75,                       // g_sum_type
+        S_g_variants = 76,                       // g_variants
+        S_g_more_variants = 77                   // g_more_variants
       };
     };
 
@@ -581,7 +647,7 @@ namespace genie {
     /// Expects its Base type to provide access to the symbol kind
     /// via kind ().
     ///
-    /// Provide access to semantic value.
+    /// Provide access to semantic value and location.
     template <typename Base>
     struct basic_symbol : Base
     {
@@ -591,6 +657,7 @@ namespace genie {
       /// Default constructor.
       basic_symbol () YY_NOEXCEPT
         : value ()
+        , location ()
       {}
 
 #if 201103L <= YY_CPLUSPLUS
@@ -598,10 +665,19 @@ namespace genie {
       basic_symbol (basic_symbol&& that)
         : Base (std::move (that))
         , value ()
+        , location (std::move (that.location))
       {
         switch (this->kind ())
     {
       case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+      case symbol_kind::S_g_case: // g_case
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_optional_else: // g_optional_else
+      case symbol_kind::S_g_assign: // g_assign
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
         value.move< GenieBlock* > (std::move (that.value));
         break;
 
@@ -613,14 +689,10 @@ namespace genie {
         value.move< GenieData::MutabilitySpecifier > (std::move (that.value));
         break;
 
-      case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
-      case symbol_kind::S_g_type_decl: // g_type_decl
-      case symbol_kind::S_g_type_ref_or_def: // g_type_ref_or_def
-        value.move< GenieData::TypeAnnotation > (std::move (that.value));
-        break;
-
       case symbol_kind::S_g_expression: // g_expression
+      case symbol_kind::S_g_any_expr: // g_any_expr
       case symbol_kind::S_g_expr: // g_expr
+      case symbol_kind::S_g_control_expr: // g_control_expr
       case symbol_kind::S_g_optional_init_expr: // g_optional_init_expr
         value.move< GenieExpr > (std::move (that.value));
         break;
@@ -656,6 +728,8 @@ namespace genie {
       case symbol_kind::S_INT: // INT
       case symbol_kind::S_REAL: // REAL
       case symbol_kind::S_ID: // ID
+      case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
+      case symbol_kind::S_g_type_decl: // g_type_decl
         value.move< std::string > (std::move (that.value));
         break;
 
@@ -665,6 +739,8 @@ namespace genie {
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
+      case symbol_kind::S_g_param_list: // g_param_list
+      case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.move< std::vector<GenieFunction::FunctionParam> > (std::move (that.value));
         break;
 
@@ -685,206 +761,226 @@ namespace genie {
 
       /// Constructors for typed symbols.
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t)
+      basic_symbol (typename Base::kind_type t, location_type&& l)
         : Base (t)
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t)
+      basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieBlock*&& v)
+      basic_symbol (typename Base::kind_type t, GenieBlock*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieBlock*& v)
+      basic_symbol (typename Base::kind_type t, const GenieBlock*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieData*&& v)
+      basic_symbol (typename Base::kind_type t, GenieData*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieData*& v)
+      basic_symbol (typename Base::kind_type t, const GenieData*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieData::MutabilitySpecifier&& v)
+      basic_symbol (typename Base::kind_type t, GenieData::MutabilitySpecifier&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieData::MutabilitySpecifier& v)
+      basic_symbol (typename Base::kind_type t, const GenieData::MutabilitySpecifier& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieData::TypeAnnotation&& v)
+      basic_symbol (typename Base::kind_type t, GenieExpr&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieData::TypeAnnotation& v)
+      basic_symbol (typename Base::kind_type t, const GenieExpr& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieExpr&& v)
+      basic_symbol (typename Base::kind_type t, GenieFunction*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieExpr& v)
+      basic_symbol (typename Base::kind_type t, const GenieFunction*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieFunction*&& v)
+      basic_symbol (typename Base::kind_type t, GenieFunction::FunctionParam&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieFunction*& v)
+      basic_symbol (typename Base::kind_type t, const GenieFunction::FunctionParam& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieFunction::FunctionParam&& v)
+      basic_symbol (typename Base::kind_type t, GenieModule*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieFunction::FunctionParam& v)
+      basic_symbol (typename Base::kind_type t, const GenieModule*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieModule*&& v)
+      basic_symbol (typename Base::kind_type t, GenieModule::ModuleElem&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieModule*& v)
+      basic_symbol (typename Base::kind_type t, const GenieModule::ModuleElem& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieModule::ModuleElem&& v)
+      basic_symbol (typename Base::kind_type t, GenieType*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieModule::ModuleElem& v)
+      basic_symbol (typename Base::kind_type t, const GenieType*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieType*&& v)
+      basic_symbol (typename Base::kind_type t, GenieType::SumType*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieType*& v)
+      basic_symbol (typename Base::kind_type t, const GenieType::SumType*& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, GenieType::SumType*&& v)
+      basic_symbol (typename Base::kind_type t, char&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const GenieType::SumType*& v)
+      basic_symbol (typename Base::kind_type t, const char& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, char&& v)
+      basic_symbol (typename Base::kind_type t, std::string&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const char& v)
+      basic_symbol (typename Base::kind_type t, const std::string& v, const location_type& l)
         : Base (t)
         , value (v)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::string&& v)
-        : Base (t)
-        , value (std::move (v))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const std::string& v)
-        : Base (t)
-        , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, std::vector<
-            GenieModule::ModuleElem>&& v)
+            GenieModule::ModuleElem>&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
       basic_symbol (typename Base::kind_type t, const std::vector<
-            GenieModule::ModuleElem>& v)
+            GenieModule::ModuleElem>& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::vector<GenieFunction::FunctionParam>&& v)
+      basic_symbol (typename Base::kind_type t, std::vector<GenieFunction::FunctionParam>&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const std::vector<GenieFunction::FunctionParam>& v)
+      basic_symbol (typename Base::kind_type t, const std::vector<GenieFunction::FunctionParam>& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::vector<std::string>&& v)
+      basic_symbol (typename Base::kind_type t, std::vector<std::string>&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
+        , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const std::vector<std::string>& v)
+      basic_symbol (typename Base::kind_type t, const std::vector<std::string>& v, const location_type& l)
         : Base (t)
         , value (v)
+        , location (l)
       {}
 #endif
 
@@ -913,6 +1009,14 @@ namespace genie {
 switch (yykind)
     {
       case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+      case symbol_kind::S_g_case: // g_case
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_optional_else: // g_optional_else
+      case symbol_kind::S_g_assign: // g_assign
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
         value.template destroy< GenieBlock* > ();
         break;
 
@@ -924,14 +1028,10 @@ switch (yykind)
         value.template destroy< GenieData::MutabilitySpecifier > ();
         break;
 
-      case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
-      case symbol_kind::S_g_type_decl: // g_type_decl
-      case symbol_kind::S_g_type_ref_or_def: // g_type_ref_or_def
-        value.template destroy< GenieData::TypeAnnotation > ();
-        break;
-
       case symbol_kind::S_g_expression: // g_expression
+      case symbol_kind::S_g_any_expr: // g_any_expr
       case symbol_kind::S_g_expr: // g_expr
+      case symbol_kind::S_g_control_expr: // g_control_expr
       case symbol_kind::S_g_optional_init_expr: // g_optional_init_expr
         value.template destroy< GenieExpr > ();
         break;
@@ -967,6 +1067,8 @@ switch (yykind)
       case symbol_kind::S_INT: // INT
       case symbol_kind::S_REAL: // REAL
       case symbol_kind::S_ID: // ID
+      case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
+      case symbol_kind::S_g_type_decl: // g_type_decl
         value.template destroy< std::string > ();
         break;
 
@@ -976,6 +1078,8 @@ switch (yykind)
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
+      case symbol_kind::S_g_param_list: // g_param_list
+      case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.template destroy< std::vector<GenieFunction::FunctionParam> > ();
         break;
 
@@ -1011,6 +1115,9 @@ switch (yykind)
 
       /// The semantic value.
       value_type value;
+
+      /// The location.
+      location_type location;
 
     private:
 #if YY_CPLUSPLUS < 201103L
@@ -1073,19 +1180,19 @@ switch (yykind)
 
       /// Constructor for valueless symbols, and symbols from each type.
 #if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok)
-        : super_type (token_kind_type (tok))
+      symbol_type (int tok, location_type l)
+        : super_type (token_kind_type (tok), std::move (l))
 #else
-      symbol_type (int tok)
-        : super_type (token_kind_type (tok))
+      symbol_type (int tok, const location_type& l)
+        : super_type (token_kind_type (tok), l)
 #endif
       {}
 #if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok, std::string v)
-        : super_type (token_kind_type (tok), std::move (v))
+      symbol_type (int tok, std::string v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
 #else
-      symbol_type (int tok, const std::string& v)
-        : super_type (token_kind_type (tok), v)
+      symbol_type (int tok, const std::string& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
 #endif
       {}
     };
@@ -1124,8 +1231,9 @@ switch (yykind)
 #endif
 
     /// Report a syntax error.
+    /// \param loc    where the syntax error is found.
     /// \param msg    a description of the syntax error.
-    virtual void error (const std::string& msg);
+    virtual void error (const location_type& loc, const std::string& msg);
 
     /// Report a syntax error.
     void error (const syntax_error& err);
@@ -1141,391 +1249,691 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_YYEOF ()
+      make_YYEOF (location_type l)
       {
-        return symbol_type (token::YYEOF);
+        return symbol_type (token::YYEOF, std::move (l));
       }
 #else
       static
       symbol_type
-      make_YYEOF ()
+      make_YYEOF (const location_type& l)
       {
-        return symbol_type (token::YYEOF);
+        return symbol_type (token::YYEOF, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_YYerror ()
+      make_YYerror (location_type l)
       {
-        return symbol_type (token::YYerror);
+        return symbol_type (token::YYerror, std::move (l));
       }
 #else
       static
       symbol_type
-      make_YYerror ()
+      make_YYerror (const location_type& l)
       {
-        return symbol_type (token::YYerror);
+        return symbol_type (token::YYerror, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_YYUNDEF ()
+      make_YYUNDEF (location_type l)
       {
-        return symbol_type (token::YYUNDEF);
+        return symbol_type (token::YYUNDEF, std::move (l));
       }
 #else
       static
       symbol_type
-      make_YYUNDEF ()
+      make_YYUNDEF (const location_type& l)
       {
-        return symbol_type (token::YYUNDEF);
+        return symbol_type (token::YYUNDEF, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_PLUS ()
+      make_PLUS (location_type l)
       {
-        return symbol_type (token::PLUS);
+        return symbol_type (token::PLUS, std::move (l));
       }
 #else
       static
       symbol_type
-      make_PLUS ()
+      make_PLUS (const location_type& l)
       {
-        return symbol_type (token::PLUS);
+        return symbol_type (token::PLUS, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_MINUS ()
+      make_MINUS (location_type l)
       {
-        return symbol_type (token::MINUS);
+        return symbol_type (token::MINUS, std::move (l));
       }
 #else
       static
       symbol_type
-      make_MINUS ()
+      make_MINUS (const location_type& l)
       {
-        return symbol_type (token::MINUS);
+        return symbol_type (token::MINUS, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_MULT ()
+      make_MULT (location_type l)
       {
-        return symbol_type (token::MULT);
+        return symbol_type (token::MULT, std::move (l));
       }
 #else
       static
       symbol_type
-      make_MULT ()
+      make_MULT (const location_type& l)
       {
-        return symbol_type (token::MULT);
+        return symbol_type (token::MULT, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_DIV ()
+      make_DIV (location_type l)
       {
-        return symbol_type (token::DIV);
+        return symbol_type (token::DIV, std::move (l));
       }
 #else
       static
       symbol_type
-      make_DIV ()
+      make_DIV (const location_type& l)
       {
-        return symbol_type (token::DIV);
+        return symbol_type (token::DIV, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_EXP ()
+      make_EXP (location_type l)
       {
-        return symbol_type (token::EXP);
+        return symbol_type (token::EXP, std::move (l));
       }
 #else
       static
       symbol_type
-      make_EXP ()
+      make_EXP (const location_type& l)
       {
-        return symbol_type (token::EXP);
+        return symbol_type (token::EXP, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_MOD ()
+      make_MOD (location_type l)
       {
-        return symbol_type (token::MOD);
+        return symbol_type (token::MOD, std::move (l));
       }
 #else
       static
       symbol_type
-      make_MOD ()
+      make_MOD (const location_type& l)
       {
-        return symbol_type (token::MOD);
+        return symbol_type (token::MOD, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_OPEN_PAREN ()
+      make_OPEN_PAREN (location_type l)
       {
-        return symbol_type (token::OPEN_PAREN);
+        return symbol_type (token::OPEN_PAREN, std::move (l));
       }
 #else
       static
       symbol_type
-      make_OPEN_PAREN ()
+      make_OPEN_PAREN (const location_type& l)
       {
-        return symbol_type (token::OPEN_PAREN);
+        return symbol_type (token::OPEN_PAREN, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_CLOSED_PAREN ()
+      make_CLOSED_PAREN (location_type l)
       {
-        return symbol_type (token::CLOSED_PAREN);
+        return symbol_type (token::CLOSED_PAREN, std::move (l));
       }
 #else
       static
       symbol_type
-      make_CLOSED_PAREN ()
+      make_CLOSED_PAREN (const location_type& l)
       {
-        return symbol_type (token::CLOSED_PAREN);
+        return symbol_type (token::CLOSED_PAREN, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_OPEN_CURLY ()
+      make_OPEN_CURLY (location_type l)
       {
-        return symbol_type (token::OPEN_CURLY);
+        return symbol_type (token::OPEN_CURLY, std::move (l));
       }
 #else
       static
       symbol_type
-      make_OPEN_CURLY ()
+      make_OPEN_CURLY (const location_type& l)
       {
-        return symbol_type (token::OPEN_CURLY);
+        return symbol_type (token::OPEN_CURLY, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_CLOSED_CURLY ()
+      make_CLOSED_CURLY (location_type l)
       {
-        return symbol_type (token::CLOSED_CURLY);
+        return symbol_type (token::CLOSED_CURLY, std::move (l));
       }
 #else
       static
       symbol_type
-      make_CLOSED_CURLY ()
+      make_CLOSED_CURLY (const location_type& l)
       {
-        return symbol_type (token::CLOSED_CURLY);
+        return symbol_type (token::CLOSED_CURLY, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_EQUAL ()
+      make_OPEN_SQ_BRACKET (location_type l)
       {
-        return symbol_type (token::EQUAL);
+        return symbol_type (token::OPEN_SQ_BRACKET, std::move (l));
       }
 #else
       static
       symbol_type
-      make_EQUAL ()
+      make_OPEN_SQ_BRACKET (const location_type& l)
       {
-        return symbol_type (token::EQUAL);
+        return symbol_type (token::OPEN_SQ_BRACKET, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_COLON ()
+      make_CLOSED_SQ_BRACKET (location_type l)
       {
-        return symbol_type (token::COLON);
+        return symbol_type (token::CLOSED_SQ_BRACKET, std::move (l));
       }
 #else
       static
       symbol_type
-      make_COLON ()
+      make_CLOSED_SQ_BRACKET (const location_type& l)
       {
-        return symbol_type (token::COLON);
+        return symbol_type (token::CLOSED_SQ_BRACKET, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_COMMA ()
+      make_EQUAL (location_type l)
       {
-        return symbol_type (token::COMMA);
+        return symbol_type (token::EQUAL, std::move (l));
       }
 #else
       static
       symbol_type
-      make_COMMA ()
+      make_EQUAL (const location_type& l)
       {
-        return symbol_type (token::COMMA);
+        return symbol_type (token::EQUAL, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_VAR ()
+      make_COLON (location_type l)
       {
-        return symbol_type (token::VAR);
+        return symbol_type (token::COLON, std::move (l));
       }
 #else
       static
       symbol_type
-      make_VAR ()
+      make_COLON (const location_type& l)
       {
-        return symbol_type (token::VAR);
+        return symbol_type (token::COLON, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_VAL ()
+      make_COMMA (location_type l)
       {
-        return symbol_type (token::VAL);
+        return symbol_type (token::COMMA, std::move (l));
       }
 #else
       static
       symbol_type
-      make_VAL ()
+      make_COMMA (const location_type& l)
       {
-        return symbol_type (token::VAL);
+        return symbol_type (token::COMMA, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_FUN ()
+      make_VAR (location_type l)
       {
-        return symbol_type (token::FUN);
+        return symbol_type (token::VAR, std::move (l));
       }
 #else
       static
       symbol_type
-      make_FUN ()
+      make_VAR (const location_type& l)
       {
-        return symbol_type (token::FUN);
+        return symbol_type (token::VAR, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_SUM ()
+      make_VAL (location_type l)
       {
-        return symbol_type (token::SUM);
+        return symbol_type (token::VAL, std::move (l));
       }
 #else
       static
       symbol_type
-      make_SUM ()
+      make_VAL (const location_type& l)
       {
-        return symbol_type (token::SUM);
+        return symbol_type (token::VAL, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_ALT ()
+      make_FUN (location_type l)
       {
-        return symbol_type (token::ALT);
+        return symbol_type (token::FUN, std::move (l));
       }
 #else
       static
       symbol_type
-      make_ALT ()
+      make_FUN (const location_type& l)
       {
-        return symbol_type (token::ALT);
+        return symbol_type (token::FUN, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_G_EOL ()
+      make_SUM (location_type l)
       {
-        return symbol_type (token::G_EOL);
+        return symbol_type (token::SUM, std::move (l));
       }
 #else
       static
       symbol_type
-      make_G_EOL ()
+      make_SUM (const location_type& l)
       {
-        return symbol_type (token::G_EOL);
+        return symbol_type (token::SUM, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_UNKNOWN ()
+      make_ALT (location_type l)
       {
-        return symbol_type (token::UNKNOWN);
+        return symbol_type (token::ALT, std::move (l));
       }
 #else
       static
       symbol_type
-      make_UNKNOWN ()
+      make_ALT (const location_type& l)
       {
-        return symbol_type (token::UNKNOWN);
+        return symbol_type (token::ALT, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_INT (std::string v)
+      make_SWITCH (location_type l)
       {
-        return symbol_type (token::INT, std::move (v));
+        return symbol_type (token::SWITCH, std::move (l));
       }
 #else
       static
       symbol_type
-      make_INT (const std::string& v)
+      make_SWITCH (const location_type& l)
       {
-        return symbol_type (token::INT, v);
+        return symbol_type (token::SWITCH, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_REAL (std::string v)
+      make_WHILE (location_type l)
       {
-        return symbol_type (token::REAL, std::move (v));
+        return symbol_type (token::WHILE, std::move (l));
       }
 #else
       static
       symbol_type
-      make_REAL (const std::string& v)
+      make_WHILE (const location_type& l)
       {
-        return symbol_type (token::REAL, v);
+        return symbol_type (token::WHILE, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_ID (std::string v)
+      make_REP (location_type l)
       {
-        return symbol_type (token::ID, std::move (v));
+        return symbol_type (token::REP, std::move (l));
       }
 #else
       static
       symbol_type
-      make_ID (const std::string& v)
+      make_REP (const location_type& l)
       {
-        return symbol_type (token::ID, v);
+        return symbol_type (token::REP, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IF (location_type l)
+      {
+        return symbol_type (token::IF, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IF (const location_type& l)
+      {
+        return symbol_type (token::IF, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ELSE (location_type l)
+      {
+        return symbol_type (token::ELSE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ELSE (const location_type& l)
+      {
+        return symbol_type (token::ELSE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_UNTIL (location_type l)
+      {
+        return symbol_type (token::UNTIL, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_UNTIL (const location_type& l)
+      {
+        return symbol_type (token::UNTIL, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_FOR (location_type l)
+      {
+        return symbol_type (token::FOR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_FOR (const location_type& l)
+      {
+        return symbol_type (token::FOR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CASE (location_type l)
+      {
+        return symbol_type (token::CASE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CASE (const location_type& l)
+      {
+        return symbol_type (token::CASE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_STEP (location_type l)
+      {
+        return symbol_type (token::STEP, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_STEP (const location_type& l)
+      {
+        return symbol_type (token::STEP, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_G_EOL (location_type l)
+      {
+        return symbol_type (token::G_EOL, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_G_EOL (const location_type& l)
+      {
+        return symbol_type (token::G_EOL, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_UNKNOWN (location_type l)
+      {
+        return symbol_type (token::UNKNOWN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_UNKNOWN (const location_type& l)
+      {
+        return symbol_type (token::UNKNOWN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_INT (std::string v, location_type l)
+      {
+        return symbol_type (token::INT, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_INT (const std::string& v, const location_type& l)
+      {
+        return symbol_type (token::INT, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_REAL (std::string v, location_type l)
+      {
+        return symbol_type (token::REAL, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_REAL (const std::string& v, const location_type& l)
+      {
+        return symbol_type (token::REAL, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ID (std::string v, location_type l)
+      {
+        return symbol_type (token::ID, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ID (const std::string& v, const location_type& l)
+      {
+        return symbol_type (token::ID, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_OR (location_type l)
+      {
+        return symbol_type (token::OR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_OR (const location_type& l)
+      {
+        return symbol_type (token::OR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_AND (location_type l)
+      {
+        return symbol_type (token::AND, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_AND (const location_type& l)
+      {
+        return symbol_type (token::AND, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NOT (location_type l)
+      {
+        return symbol_type (token::NOT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NOT (const location_type& l)
+      {
+        return symbol_type (token::NOT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LESS_THAN (location_type l)
+      {
+        return symbol_type (token::LESS_THAN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LESS_THAN (const location_type& l)
+      {
+        return symbol_type (token::LESS_THAN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_GREATER_THAN (location_type l)
+      {
+        return symbol_type (token::GREATER_THAN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_GREATER_THAN (const location_type& l)
+      {
+        return symbol_type (token::GREATER_THAN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LESS_THAN_EQ (location_type l)
+      {
+        return symbol_type (token::LESS_THAN_EQ, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LESS_THAN_EQ (const location_type& l)
+      {
+        return symbol_type (token::LESS_THAN_EQ, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_GREATER_THAN_EQ (location_type l)
+      {
+        return symbol_type (token::GREATER_THAN_EQ, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_GREATER_THAN_EQ (const location_type& l)
+      {
+        return symbol_type (token::GREATER_THAN_EQ, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IS_EQUAL_TO (location_type l)
+      {
+        return symbol_type (token::IS_EQUAL_TO, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IS_EQUAL_TO (const location_type& l)
+      {
+        return symbol_type (token::IS_EQUAL_TO, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IS_NOT_EQUAL_TO (location_type l)
+      {
+        return symbol_type (token::IS_NOT_EQUAL_TO, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IS_NOT_EQUAL_TO (const location_type& l)
+      {
+        return symbol_type (token::IS_NOT_EQUAL_TO, l);
       }
 #endif
 
@@ -1540,7 +1948,7 @@ switch (yykind)
 
 
     /// Stored state numbers (used for stacks).
-    typedef signed char state_type;
+    typedef unsigned char state_type;
 
     /// Compute post-reduction state.
     /// \param yystate   the current state
@@ -1572,7 +1980,7 @@ switch (yykind)
     // Tables.
     // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
     // STATE-NUM.
-    static const signed char yypact_[];
+    static const short yypact_[];
 
     // YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
     // Performed when YYTABLE does not specify something else to do.  Zero
@@ -1588,9 +1996,9 @@ switch (yykind)
     // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
     // positive, shift that token.  If negative, reduce the rule whose
     // number is the opposite.  If YYTABLE_NINF, syntax error.
-    static const signed char yytable_[];
+    static const short yytable_[];
 
-    static const signed char yycheck_[];
+    static const short yycheck_[];
 
     // YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
     // state STATE-NUM.
@@ -1832,8 +2240,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 71,     ///< Last index in yytable_.
-      yynnts_ = 21,  ///< Number of nonterminal symbols.
+      yylast_ = 298,     ///< Last index in yytable_.
+      yynnts_ = 32,  ///< Number of nonterminal symbols.
       yyfinal_ = 3 ///< Termination state number.
     };
 
@@ -1845,19 +2253,19 @@ switch (yykind)
   };
 
 
-#line 17 "parser.y"
+#line 20 "parser.y"
 } // genie
-#line 1851 "Genie-Parser.hpp"
+#line 2259 "Genie-Parser.hpp"
 
 
 // "%code provides" blocks.
-#line 25 "parser.y"
+#line 29 "parser.y"
 
     #define YY_DECL \
-        int yylex(genie::GenieParser::semantic_type *yylval, yyscan_t yyscanner,genie::GenieModule*& mod)
+        int yylex(genie::GenieParser::semantic_type *yylval, genie::GenieParser::location_type* yylloc, yyscan_t yyscanner,genie::GenieModule*& mod)
     YY_DECL;
 
-#line 1861 "Genie-Parser.hpp"
+#line 2269 "Genie-Parser.hpp"
 
 
 #endif // !YY_YY_GENIE_PARSER_HPP_INCLUDED
