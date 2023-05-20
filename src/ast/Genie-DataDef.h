@@ -18,7 +18,7 @@ namespace genie {
 
         GenieExpr initializer;
 
-        GenieData(MutabilitySpecifier,const std::string&, const std::string&, GenieExpr);
+        GenieData(MutabilitySpecifier,const std::string&, const std::string&, const GenieExpr&);
 
         void free();
     };

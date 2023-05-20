@@ -1,11 +1,11 @@
-fun area r : int {
-	3.14159 * r**2
+fun area r : int -> int {
+	^3.14159 * r**2
 }
-print[2*area[3]]
+^print[2*area[3],341321]
 1+12*3424**434%2131
-val x : int = 123**1323+1231/12312*132%123
+val x  = 123**1323+1231/12312*132%123
 var y = x + 1
-
+var y
 val pi = 3.14159
 var r = 5
 var area = pi*r**2
@@ -26,7 +26,7 @@ fun with_params x:int
    x+y+z+w
 }
 // h4lllow kqw po40i  +  {{{ {{ { {{ { { { {
-var z = switch x {
+switch x {
     case 0 {
         1
     }
@@ -50,9 +50,9 @@ else {
     if x < y {
         print[0]
     }
-    //else {
-    //    print[2]
-    //}
+    else {
+        print[2]
+    }
 }
 
 repeat {

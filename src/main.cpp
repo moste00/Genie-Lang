@@ -1,4 +1,5 @@
 #include "parser-invoker/bison-invoker/Genie-BisonInvoker.h"
+#include "compiler/Genie-Compiler.h"
 #include <iostream>
 
 int main(int argc,char* argv[]) {
@@ -8,4 +9,9 @@ int main(int argc,char* argv[]) {
     }
     genie::BisonInvoker invoker;
     invoker.add_file(argv[1]);
+
+//    genie::GenieCompiler compiler;
+//    invoker.ast_for_each(compiler);
+//    std::cout<<compiler.serialize_bytecode_to_lisp();
+    return 0;
 }

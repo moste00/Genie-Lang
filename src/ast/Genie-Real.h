@@ -6,5 +6,7 @@
 namespace genie {
     struct GenieReal {
         mpq_class value;
+
+        GenieReal(std::string&);
     };
 }

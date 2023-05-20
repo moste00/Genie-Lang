@@ -37,6 +37,20 @@ namespace genie {
                 delete e.as_bin;
                 break;
             }
+            case GenieExprType::IDENT_TYPE:
+                break;
+            case GenieExprType::FOR_TYPE:
+                break;
+            case GenieExprType::WHILE_TYPE:
+                break;
+            case GenieExprType::SWITCH_TYPE:
+                break;
+            case GenieExprType::IFELSE_TYPE:
+                break;
+            case GenieExprType::REPUNTIL_TYPE:
+                break;
+            case GenieExprType::NONE_TYPE:
+                break;
         }
     }
 
@@ -48,5 +62,35 @@ namespace genie {
     GenieExpr::GenieExpr(const string& id) {
         type = GenieExprType::IDENT_TYPE;
         e.as_ident = new std::string(id);
+    }
+
+    GenieExpr::GenieExpr(GenieFor* loop) {
+        type = GenieExprType::FOR_TYPE;
+        e.as_for = loop;
+    }
+
+    GenieExpr::GenieExpr(GenieWhile* loop) {
+        type = GenieExprType::WHILE_TYPE;
+        e.as_while = loop;
+    }
+
+    GenieExpr::GenieExpr(GenieSwitch* switsh) {
+        type = GenieExprType::SWITCH_TYPE;
+        e.as_switch = switsh;
+    }
+
+    GenieExpr::GenieExpr(GenieIfElse* ifels) {
+        type=  GenieExprType::IFELSE_TYPE;
+        e.as_ifelse = ifels;
+    }
+
+    GenieExpr::GenieExpr(GenieRepUntil* loop) {
+        type = GenieExprType::REPUNTIL_TYPE;
+        e.as_repuntil = loop;
+    }
+
+    GenieExpr::GenieExpr(GenieFunCall* funcall) {
+        type = GenieExprType::FUNCALL_TYPE;
+        e.as_funcall = funcall;
     }
 }

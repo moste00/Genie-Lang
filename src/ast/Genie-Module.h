@@ -6,13 +6,16 @@
 #include "Genie-DataDef.h"
 #include "Genie-FunctionDef.h"
 #include "Genie-TypeDef.h"
-//no include for Genie-Block, it needs to include us so we can't circularly include it
+//no include for Genie-Block, it needs to include us to mention GenieModule::ModuleElem, so we can't circularly include it
+#include "Genie-Assignment.h"
+#include "Genie-Return.h"
+
 namespace genie {
     class GenieBlock;
 
     struct GenieModule {
         struct ModuleElem {
-            enum class Type {EXPR,TYPE,DATA,BLOCK,FUNCTION};
+            enum class Type {EXPR,TYPE,DATA,BLOCK,FUNCTION,ASSIGN,RET};
             Type t;
             union _ {
                 GenieExpr expr;
@@ -20,7 +23,8 @@ namespace genie {
                 GenieData* data;
                 GenieBlock* block;
                 GenieFunction* function;
-
+                GenieAssign* assignment;
+                GenieRet*    ret;
                 _(){}
                 ~_(){}
             } e;
@@ -31,7 +35,8 @@ namespace genie {
             ModuleElem(GenieData*);
             ModuleElem(GenieBlock*);
             ModuleElem(GenieFunction*);
-
+            ModuleElem(GenieAssign*);
+            ModuleElem(GenieRet*);
             void free();
         };
 

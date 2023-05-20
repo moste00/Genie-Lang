@@ -9,9 +9,10 @@
 
 non_newline_ws    (" "|"\t"|"\r"|"\v"|"\f")
 newline           "\n"
-comment           "//"(.*\n)
+comment           "//"(.*)
 OPEN_CURLY_BRACE   ("{"{newline}*)
 CLOSED_CURLY_BRACE ("}"{newline}*)
+COMMA              (","{newline}*)
 decimal_digits    ([0-9]+)
 binary_digits     ([0-1]+)
 octal_digits      ([0-7]+)
@@ -20,7 +21,7 @@ integer           (({decimal_digits})|("b"{binary_digits})|("o"{octal_digits})|(
 real_fractional_part  ("."{integer})
 real_integral_part    ({integer}".")
 real                  (({integer}?{real_fractional_part})|({real_integral_part}{integer}?))
-id                ([a-zA-Z?~_$!\\][a-zA-Z?~_$!\\0-9]*)
+id                ([a-zA-Z?_$!\\][a-zA-Z?_$!\\0-9]*)
 %%
 
 "var"              return genie::GenieParser::token::VAR;
@@ -45,15 +46,17 @@ id                ([a-zA-Z?~_$!\\][a-zA-Z?~_$!\\0-9]*)
 "%"                return genie::GenieParser::token::MOD;
 
 
-">"                return genie::GenieParser::token::LESS_THAN;
-"<"                return genie::GenieParser::token::GREATER_THAN;
+">"                return genie::GenieParser::token::GREATER_THAN;
+"<"                return genie::GenieParser::token::LESS_THAN;
 "<="               return genie::GenieParser::token::LESS_THAN_EQ;
 ">="               return genie::GenieParser::token::GREATER_THAN_EQ;
 "is"               return genie::GenieParser::token::IS_EQUAL_TO;
-"^is"              return genie::GenieParser::token::IS_NOT_EQUAL_TO;
+"~is"              return genie::GenieParser::token::IS_NOT_EQUAL_TO;
 "and"              return genie::GenieParser::token::AND;
 "or"               return genie::GenieParser::token::OR;
 "not"              return genie::GenieParser::token::NOT;
+"->"               return genie::GenieParser::token::RET_TYPE_MARK;
+"^"                return genie::GenieParser::token::RETURN;
 
 "|"                  return genie::GenieParser::token::ALT;
 "("                  return genie::GenieParser::token::OPEN_PAREN;
@@ -65,13 +68,13 @@ id                ([a-zA-Z?~_$!\\][a-zA-Z?~_$!\\0-9]*)
 
 "="                return genie::GenieParser::token::EQUAL;
 ":"                return genie::GenieParser::token::COLON;
-","                return genie::GenieParser::token::COMMA;
+{COMMA}            return genie::GenieParser::token::COMMA;
 
 {integer}          {yylval->emplace<std::string>(yytext);return genie::GenieParser::token::INT;}
 {real}             {yylval->emplace<std::string>(yytext);return genie::GenieParser::token::REAL;}
 {id}               {yylval->emplace<std::string>(yytext);return genie::GenieParser::token::ID;}
 {non_newline_ws}       /*   whitespace is ignored   */
-{comment}              /*   comments are ignroed    */
+{comment}          return genie::GenieParser::token::G_EOL;    /*   comments are ignored but we use them to terminate expressions for better usability */
 {newline}+         return genie::GenieParser::token::G_EOL;
 <<EOF>>            return genie::GenieParser::token::YYEOF;
 .                  return genie::GenieParser::token::UNKNOWN;

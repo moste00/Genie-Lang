@@ -5,9 +5,10 @@
 #include "Genie-Block.h"
 
 namespace genie {
-    GenieFunction::GenieFunction(std::string n, std::vector<FunctionParam>& ps,GenieBlock *b) : params(std::move(ps)) {
+    GenieFunction::GenieFunction(std::string n, std::vector<FunctionParam>& ps,std::string rt,GenieBlock *b) : params(std::move(ps)) {
         name = std::move(n);
         body = b;
+        ret_type = std::move(rt);
     }
 
     void GenieFunction::free() {

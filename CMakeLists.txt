@@ -18,6 +18,28 @@ add_executable(Genie
                 "src/ast/Genie-FunctionDef.cpp"
                 "src/ast/Genie-TypeDef.cpp"
                 "src/ast/Genie-Module.cpp"
-                "src/ast/Genie-Program.cpp" src/parser-invoker/Genie-ParserInvoker.h src/parser-invoker/Genie-AstWalker.h src/pretty-printers/Genie-JsonAstPrinter.cpp src/pretty-printers/Genie-JsonAstPrinter.h src/parser-invoker/bison-invoker/Genie-BisonInvoker.cpp src/parser-invoker/bison-invoker/Genie-BisonInvoker.h)
+                "src/ast/Genie-Program.cpp"
+                "src/ast/Genie-Switch.cpp"
+                "src/ast/Genie-IfElse.cpp"
+                "src/ast/Genie-While.cpp"
+                "src/ast/Genie-RepeatUntil.cpp"
+                "src/ast/Genie-For.cpp"
+                "src/ast/Genie-FunctionCall.cpp"
+                "src/ast/Genie-Assignment.cpp"
+                "src/ast/Genie-Return.cpp"
+
+                "src/parser-invoker/Genie-ParserInvoker.cpp"
+                "src/parser-invoker/Genie-AstProcessor.cpp"
+                "src/parser-invoker/bison-invoker/Genie-BisonInvoker.cpp"
+
+                "src/pretty-printers/Genie-JsonAstPrinter.cpp"
+
+                "src/compiler/Genie-Compiler.cpp"
+
+                "src/bytecode/Genie-ByteCodeBuffer.cpp"
+                "src/bytecode/Genie-ByteCodeEmitter.cpp"
+                "src/symbol-table/Scope.cpp"
+                "src/symbol-table/SymbolTable.cpp"
+                )
 
 target_link_libraries(Genie "/usr/local/lib/libgmp.a" "/usr/local/lib/libgmpxx.a")

@@ -19,7 +19,6 @@ namespace genie {
         string to_str();
 
         void free();
-    private:
         //The smalltalk trick : An 8-byte region of memory is a pointer if the LSB bit is 0
         //(because all new and malloc calls returns 8-byte-boundary-aligned pointers, the last 3 bits are always 0)
         //So that means we can safely "pun" the same region by setting the LSB to 1 and then storing whatever

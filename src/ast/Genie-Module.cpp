@@ -33,6 +33,16 @@ namespace genie {
         t = Type::FUNCTION;
         e.function = f;
     }
+    GenieModule::ModuleElem::ModuleElem(GenieAssign* assign) {
+        t = Type::ASSIGN;
+        e.assignment = assign;
+    }
+
+    GenieModule::ModuleElem::ModuleElem(GenieRet* r) {
+        t = Type::RET;
+        e.ret = r;
+    }
+
     GenieModule::ModuleElem::ModuleElem(const ModuleElem& copy) {
         t = copy.t;
         e = copy.e;

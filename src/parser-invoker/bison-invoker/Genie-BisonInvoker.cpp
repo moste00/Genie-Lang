@@ -16,14 +16,17 @@ namespace genie {
 
         GenieModule* mod;
         GenieParser parser(scanner,mod);
-        parser.set_debug_level(1);
+
+        //parser.set_debug_level(1);
         int failed = parser.parse();
         if (failed != 0) {
             std::cerr << "Couldn't parse input \n";
             exit(-1);
         }
+
         std::cout<<"Done Parsing !!!";
         yylex_destroy(scanner);
+        prog.modules.push_back(mod);
     }
 
     void BisonInvoker::add_string(const string &string1) {

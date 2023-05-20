@@ -381,70 +381,82 @@ namespace genie {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // g_block
-      // g_switch_body
-      // g_cases
-      // g_case
-      // g_for_var_decl
-      // g_optional_else
       // g_assign
-      // g_fun_call_args
-      // g_rest_of_fun_call_args
-      char dummy1[sizeof (GenieBlock*)];
+      char dummy1[sizeof (GenieAssign*)];
+
+      // g_block
+      // g_optional_else
+      char dummy2[sizeof (GenieBlock*)];
 
       // g_data_def
-      char dummy2[sizeof (GenieData*)];
+      char dummy3[sizeof (GenieData*)];
 
       // g_data_def_mut_spec
-      char dummy3[sizeof (GenieData::MutabilitySpecifier)];
+      char dummy4[sizeof (GenieData::MutabilitySpecifier)];
 
       // g_expression
       // g_any_expr
       // g_expr
       // g_control_expr
       // g_optional_init_expr
-      char dummy4[sizeof (GenieExpr)];
+      char dummy5[sizeof (GenieExpr)];
 
       // g_func_def
-      char dummy5[sizeof (GenieFunction*)];
+      char dummy6[sizeof (GenieFunction*)];
 
       // g_param
-      char dummy6[sizeof (GenieFunction::FunctionParam)];
+      char dummy7[sizeof (GenieFunction::FunctionParam)];
 
       // g_source
-      char dummy7[sizeof (GenieModule*)];
+      char dummy8[sizeof (GenieModule*)];
 
       // g_module_element
-      char dummy8[sizeof (GenieModule::ModuleElem)];
+      char dummy9[sizeof (GenieModule::ModuleElem)];
+
+      // g_return
+      char dummy10[sizeof (GenieRet*)];
+
+      // g_case
+      char dummy11[sizeof (GenieSwitch::GenieCase)];
 
       // g_type_def
-      char dummy9[sizeof (GenieType*)];
+      char dummy12[sizeof (GenieType*)];
 
       // g_sum_type
-      char dummy10[sizeof (GenieType::SumType*)];
+      char dummy13[sizeof (GenieType::SumType*)];
 
+      // g_ignored_newlines
       // g_param_end
-      char dummy11[sizeof (char)];
+      char dummy14[sizeof (char)];
 
       // INT
       // REAL
       // ID
       // g_optional_type_decl
       // g_type_decl
-      char dummy12[sizeof (std::string)];
+      // g_optional_ret_type
+      char dummy15[sizeof (std::string)];
 
-      // g_module_elements
-      char dummy13[sizeof (std::vector<
-            GenieModule::ModuleElem>)];
+      // g_for_var_decl
+      // g_fun_call_args
+      // g_rest_of_fun_call_args
+      char dummy16[sizeof (std::vector<GenieExpr>)];
 
       // g_optional_param_list
       // g_param_list
       // g_rest_of_param_list
-      char dummy14[sizeof (std::vector<GenieFunction::FunctionParam>)];
+      char dummy17[sizeof (std::vector<GenieFunction::FunctionParam>)];
+
+      // g_module_elements
+      char dummy18[sizeof (std::vector<GenieModule::ModuleElem>)];
+
+      // g_switch_body
+      // g_cases
+      char dummy19[sizeof (std::vector<GenieSwitch::GenieCase>)];
 
       // g_variants
       // g_more_variants
-      char dummy15[sizeof (std::vector<std::string>)];
+      char dummy20[sizeof (std::vector<std::string>)];
     };
 
     /// The size of the largest semantic type.
@@ -514,29 +526,31 @@ namespace genie {
     FUN = 275,                     // FUN
     SUM = 276,                     // SUM
     ALT = 277,                     // ALT
-    SWITCH = 278,                  // SWITCH
-    WHILE = 279,                   // WHILE
-    REP = 280,                     // REP
-    IF = 281,                      // IF
-    ELSE = 282,                    // ELSE
-    UNTIL = 283,                   // UNTIL
-    FOR = 284,                     // FOR
-    CASE = 285,                    // CASE
-    STEP = 286,                    // STEP
-    G_EOL = 287,                   // G_EOL
-    UNKNOWN = 288,                 // UNKNOWN
-    INT = 289,                     // INT
-    REAL = 290,                    // REAL
-    ID = 291,                      // ID
-    OR = 292,                      // OR
-    AND = 293,                     // AND
-    NOT = 294,                     // NOT
-    LESS_THAN = 295,               // LESS_THAN
-    GREATER_THAN = 296,            // GREATER_THAN
-    LESS_THAN_EQ = 297,            // LESS_THAN_EQ
-    GREATER_THAN_EQ = 298,         // GREATER_THAN_EQ
-    IS_EQUAL_TO = 299,             // IS_EQUAL_TO
-    IS_NOT_EQUAL_TO = 300          // IS_NOT_EQUAL_TO
+    RETURN = 278,                  // RETURN
+    RET_TYPE_MARK = 279,           // RET_TYPE_MARK
+    SWITCH = 280,                  // SWITCH
+    WHILE = 281,                   // WHILE
+    REP = 282,                     // REP
+    IF = 283,                      // IF
+    ELSE = 284,                    // ELSE
+    UNTIL = 285,                   // UNTIL
+    FOR = 286,                     // FOR
+    CASE = 287,                    // CASE
+    STEP = 288,                    // STEP
+    G_EOL = 289,                   // G_EOL
+    UNKNOWN = 290,                 // UNKNOWN
+    INT = 291,                     // INT
+    REAL = 292,                    // REAL
+    ID = 293,                      // ID
+    OR = 294,                      // OR
+    AND = 295,                     // AND
+    NOT = 296,                     // NOT
+    LESS_THAN = 297,               // LESS_THAN
+    GREATER_THAN = 298,            // GREATER_THAN
+    LESS_THAN_EQ = 299,            // LESS_THAN_EQ
+    GREATER_THAN_EQ = 300,         // GREATER_THAN_EQ
+    IS_EQUAL_TO = 301,             // IS_EQUAL_TO
+    IS_NOT_EQUAL_TO = 302          // IS_NOT_EQUAL_TO
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -553,7 +567,7 @@ namespace genie {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 46, ///< Number of tokens.
+        YYNTOKENS = 48, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -578,61 +592,66 @@ namespace genie {
         S_FUN = 20,                              // FUN
         S_SUM = 21,                              // SUM
         S_ALT = 22,                              // ALT
-        S_SWITCH = 23,                           // SWITCH
-        S_WHILE = 24,                            // WHILE
-        S_REP = 25,                              // REP
-        S_IF = 26,                               // IF
-        S_ELSE = 27,                             // ELSE
-        S_UNTIL = 28,                            // UNTIL
-        S_FOR = 29,                              // FOR
-        S_CASE = 30,                             // CASE
-        S_STEP = 31,                             // STEP
-        S_G_EOL = 32,                            // G_EOL
-        S_UNKNOWN = 33,                          // UNKNOWN
-        S_INT = 34,                              // INT
-        S_REAL = 35,                             // REAL
-        S_ID = 36,                               // ID
-        S_OR = 37,                               // OR
-        S_AND = 38,                              // AND
-        S_NOT = 39,                              // NOT
-        S_LESS_THAN = 40,                        // LESS_THAN
-        S_GREATER_THAN = 41,                     // GREATER_THAN
-        S_LESS_THAN_EQ = 42,                     // LESS_THAN_EQ
-        S_GREATER_THAN_EQ = 43,                  // GREATER_THAN_EQ
-        S_IS_EQUAL_TO = 44,                      // IS_EQUAL_TO
-        S_IS_NOT_EQUAL_TO = 45,                  // IS_NOT_EQUAL_TO
-        S_YYACCEPT = 46,                         // $accept
-        S_g_source = 47,                         // g_source
-        S_g_module_elements = 48,                // g_module_elements
-        S_g_module_element = 49,                 // g_module_element
-        S_g_expression = 50,                     // g_expression
-        S_g_any_expr = 51,                       // g_any_expr
-        S_g_expr = 52,                           // g_expr
-        S_g_control_expr = 53,                   // g_control_expr
-        S_g_block = 54,                          // g_block
-        S_g_switch_body = 55,                    // g_switch_body
-        S_g_cases = 56,                          // g_cases
-        S_g_case = 57,                           // g_case
-        S_g_for_var_decl = 58,                   // g_for_var_decl
-        S_g_optional_else = 59,                  // g_optional_else
-        S_g_assign = 60,                         // g_assign
-        S_g_data_def = 61,                       // g_data_def
-        S_g_data_def_mut_spec = 62,              // g_data_def_mut_spec
-        S_g_optional_type_decl = 63,             // g_optional_type_decl
-        S_g_type_decl = 64,                      // g_type_decl
-        S_g_optional_init_expr = 65,             // g_optional_init_expr
-        S_g_func_def = 66,                       // g_func_def
-        S_g_optional_param_list = 67,            // g_optional_param_list
-        S_g_param_list = 68,                     // g_param_list
-        S_g_rest_of_param_list = 69,             // g_rest_of_param_list
-        S_g_param = 70,                          // g_param
-        S_g_param_end = 71,                      // g_param_end
-        S_g_fun_call_args = 72,                  // g_fun_call_args
-        S_g_rest_of_fun_call_args = 73,          // g_rest_of_fun_call_args
-        S_g_type_def = 74,                       // g_type_def
-        S_g_sum_type = 75,                       // g_sum_type
-        S_g_variants = 76,                       // g_variants
-        S_g_more_variants = 77                   // g_more_variants
+        S_RETURN = 23,                           // RETURN
+        S_RET_TYPE_MARK = 24,                    // RET_TYPE_MARK
+        S_SWITCH = 25,                           // SWITCH
+        S_WHILE = 26,                            // WHILE
+        S_REP = 27,                              // REP
+        S_IF = 28,                               // IF
+        S_ELSE = 29,                             // ELSE
+        S_UNTIL = 30,                            // UNTIL
+        S_FOR = 31,                              // FOR
+        S_CASE = 32,                             // CASE
+        S_STEP = 33,                             // STEP
+        S_G_EOL = 34,                            // G_EOL
+        S_UNKNOWN = 35,                          // UNKNOWN
+        S_INT = 36,                              // INT
+        S_REAL = 37,                             // REAL
+        S_ID = 38,                               // ID
+        S_OR = 39,                               // OR
+        S_AND = 40,                              // AND
+        S_NOT = 41,                              // NOT
+        S_LESS_THAN = 42,                        // LESS_THAN
+        S_GREATER_THAN = 43,                     // GREATER_THAN
+        S_LESS_THAN_EQ = 44,                     // LESS_THAN_EQ
+        S_GREATER_THAN_EQ = 45,                  // GREATER_THAN_EQ
+        S_IS_EQUAL_TO = 46,                      // IS_EQUAL_TO
+        S_IS_NOT_EQUAL_TO = 47,                  // IS_NOT_EQUAL_TO
+        S_YYACCEPT = 48,                         // $accept
+        S_g_source = 49,                         // g_source
+        S_g_module_elements = 50,                // g_module_elements
+        S_g_ignored_newlines = 51,               // g_ignored_newlines
+        S_g_module_element = 52,                 // g_module_element
+        S_g_expression = 53,                     // g_expression
+        S_g_any_expr = 54,                       // g_any_expr
+        S_g_expr = 55,                           // g_expr
+        S_g_control_expr = 56,                   // g_control_expr
+        S_g_return = 57,                         // g_return
+        S_g_block = 58,                          // g_block
+        S_g_switch_body = 59,                    // g_switch_body
+        S_g_cases = 60,                          // g_cases
+        S_g_case = 61,                           // g_case
+        S_g_for_var_decl = 62,                   // g_for_var_decl
+        S_g_optional_else = 63,                  // g_optional_else
+        S_g_assign = 64,                         // g_assign
+        S_g_data_def = 65,                       // g_data_def
+        S_g_data_def_mut_spec = 66,              // g_data_def_mut_spec
+        S_g_optional_type_decl = 67,             // g_optional_type_decl
+        S_g_type_decl = 68,                      // g_type_decl
+        S_g_optional_init_expr = 69,             // g_optional_init_expr
+        S_g_func_def = 70,                       // g_func_def
+        S_g_optional_param_list = 71,            // g_optional_param_list
+        S_g_param_list = 72,                     // g_param_list
+        S_g_rest_of_param_list = 73,             // g_rest_of_param_list
+        S_g_param = 74,                          // g_param
+        S_g_optional_ret_type = 75,              // g_optional_ret_type
+        S_g_param_end = 76,                      // g_param_end
+        S_g_fun_call_args = 77,                  // g_fun_call_args
+        S_g_rest_of_fun_call_args = 78,          // g_rest_of_fun_call_args
+        S_g_type_def = 79,                       // g_type_def
+        S_g_sum_type = 80,                       // g_sum_type
+        S_g_variants = 81,                       // g_variants
+        S_g_more_variants = 82                   // g_more_variants
       };
     };
 
@@ -669,15 +688,12 @@ namespace genie {
       {
         switch (this->kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< GenieAssign* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.move< GenieBlock* > (std::move (that.value));
         break;
 
@@ -713,6 +729,14 @@ namespace genie {
         value.move< GenieModule::ModuleElem > (std::move (that.value));
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.move< GenieRet* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.move< GenieSwitch::GenieCase > (std::move (that.value));
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.move< GenieType* > (std::move (that.value));
         break;
@@ -721,6 +745,7 @@ namespace genie {
         value.move< GenieType::SumType* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.move< char > (std::move (that.value));
         break;
@@ -730,18 +755,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.move< std::string > (std::move (that.value));
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.move< std::vector<
-            GenieModule::ModuleElem> > (std::move (that.value));
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< std::vector<GenieExpr> > (std::move (that.value));
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.move< std::vector<GenieFunction::FunctionParam> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.move< std::vector<GenieModule::ModuleElem> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.move< std::vector<GenieSwitch::GenieCase> > (std::move (that.value));
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -768,6 +804,20 @@ namespace genie {
 #else
       basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, GenieAssign*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const GenieAssign*& v, const location_type& l)
+        : Base (t)
+        , value (v)
         , location (l)
       {}
 #endif
@@ -885,6 +935,34 @@ namespace genie {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, GenieRet*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const GenieRet*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, GenieSwitch::GenieCase&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const GenieSwitch::GenieCase& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, GenieType*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -941,15 +1019,13 @@ namespace genie {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::vector<
-            GenieModule::ModuleElem>&& v, location_type&& l)
+      basic_symbol (typename Base::kind_type t, std::vector<GenieExpr>&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
         , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const std::vector<
-            GenieModule::ModuleElem>& v, const location_type& l)
+      basic_symbol (typename Base::kind_type t, const std::vector<GenieExpr>& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -964,6 +1040,34 @@ namespace genie {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const std::vector<GenieFunction::FunctionParam>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::vector<GenieModule::ModuleElem>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::vector<GenieModule::ModuleElem>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::vector<GenieSwitch::GenieCase>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::vector<GenieSwitch::GenieCase>& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -1008,15 +1112,12 @@ namespace genie {
         // Value type destructor.
 switch (yykind)
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.template destroy< GenieAssign* > ();
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.template destroy< GenieBlock* > ();
         break;
 
@@ -1052,6 +1153,14 @@ switch (yykind)
         value.template destroy< GenieModule::ModuleElem > ();
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.template destroy< GenieRet* > ();
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.template destroy< GenieSwitch::GenieCase > ();
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.template destroy< GenieType* > ();
         break;
@@ -1060,6 +1169,7 @@ switch (yykind)
         value.template destroy< GenieType::SumType* > ();
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.template destroy< char > ();
         break;
@@ -1069,18 +1179,29 @@ switch (yykind)
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.template destroy< std::string > ();
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.template destroy< std::vector<
-            GenieModule::ModuleElem> > ();
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.template destroy< std::vector<GenieExpr> > ();
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.template destroy< std::vector<GenieFunction::FunctionParam> > ();
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.template destroy< std::vector<GenieModule::ModuleElem> > ();
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.template destroy< std::vector<GenieSwitch::GenieCase> > ();
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -1594,6 +1715,36 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_RETURN (location_type l)
+      {
+        return symbol_type (token::RETURN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RETURN (const location_type& l)
+      {
+        return symbol_type (token::RETURN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RET_TYPE_MARK (location_type l)
+      {
+        return symbol_type (token::RET_TYPE_MARK, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RET_TYPE_MARK (const location_type& l)
+      {
+        return symbol_type (token::RET_TYPE_MARK, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_SWITCH (location_type l)
       {
         return symbol_type (token::SWITCH, std::move (l));
@@ -1991,7 +2142,7 @@ switch (yykind)
     static const signed char yypgoto_[];
 
     // YYDEFGOTO[NTERM-NUM].
-    static const signed char yydefgoto_[];
+    static const unsigned char yydefgoto_[];
 
     // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
     // positive, shift that token.  If negative, reduce the rule whose
@@ -2240,8 +2391,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 298,     ///< Last index in yytable_.
-      yynnts_ = 32,  ///< Number of nonterminal symbols.
+      yylast_ = 265,     ///< Last index in yytable_.
+      yynnts_ = 35,  ///< Number of nonterminal symbols.
       yyfinal_ = 3 ///< Termination state number.
     };
 
@@ -2255,7 +2406,7 @@ switch (yykind)
 
 #line 20 "parser.y"
 } // genie
-#line 2259 "Genie-Parser.hpp"
+#line 2410 "Genie-Parser.hpp"
 
 
 // "%code provides" blocks.
@@ -2265,7 +2416,7 @@ switch (yykind)
         int yylex(genie::GenieParser::semantic_type *yylval, genie::GenieParser::location_type* yylloc, yyscan_t yyscanner,genie::GenieModule*& mod)
     YY_DECL;
 
-#line 2269 "Genie-Parser.hpp"
+#line 2420 "Genie-Parser.hpp"
 
 
 #endif // !YY_YY_GENIE_PARSER_HPP_INCLUDED

@@ -4,7 +4,7 @@
 #include <utility>
 
 namespace genie {
-    GenieData::GenieData(GenieData::MutabilitySpecifier mspec, const string& n, const string& typ, GenieExpr init) {
+    GenieData::GenieData(GenieData::MutabilitySpecifier mspec, const string& n, const string& typ, const GenieExpr& init) {
         mut_spec = mspec;
         name = n;
         type = typ;

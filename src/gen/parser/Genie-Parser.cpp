@@ -177,15 +177,12 @@ namespace genie {
   {
     switch (this->kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.copy< GenieAssign* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.copy< GenieBlock* > (YY_MOVE (that.value));
         break;
 
@@ -221,6 +218,14 @@ namespace genie {
         value.copy< GenieModule::ModuleElem > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.copy< GenieRet* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.copy< GenieSwitch::GenieCase > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.copy< GenieType* > (YY_MOVE (that.value));
         break;
@@ -229,6 +234,7 @@ namespace genie {
         value.copy< GenieType::SumType* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.copy< char > (YY_MOVE (that.value));
         break;
@@ -238,18 +244,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.copy< std::string > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.copy< std::vector<
-            GenieModule::ModuleElem> > (YY_MOVE (that.value));
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.copy< std::vector<GenieExpr> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.copy< std::vector<GenieFunction::FunctionParam> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.copy< std::vector<GenieModule::ModuleElem> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.copy< std::vector<GenieSwitch::GenieCase> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -288,15 +305,12 @@ namespace genie {
     super_type::move (s);
     switch (this->kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< GenieAssign* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.move< GenieBlock* > (YY_MOVE (s.value));
         break;
 
@@ -332,6 +346,14 @@ namespace genie {
         value.move< GenieModule::ModuleElem > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.move< GenieRet* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.move< GenieSwitch::GenieCase > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.move< GenieType* > (YY_MOVE (s.value));
         break;
@@ -340,6 +362,7 @@ namespace genie {
         value.move< GenieType::SumType* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.move< char > (YY_MOVE (s.value));
         break;
@@ -349,18 +372,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.move< std::string > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.move< std::vector<
-            GenieModule::ModuleElem> > (YY_MOVE (s.value));
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< std::vector<GenieExpr> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.move< std::vector<GenieFunction::FunctionParam> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.move< std::vector<GenieModule::ModuleElem> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.move< std::vector<GenieSwitch::GenieCase> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -469,15 +503,12 @@ namespace genie {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.YY_MOVE_OR_COPY< GenieAssign* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.YY_MOVE_OR_COPY< GenieBlock* > (YY_MOVE (that.value));
         break;
 
@@ -513,6 +544,14 @@ namespace genie {
         value.YY_MOVE_OR_COPY< GenieModule::ModuleElem > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.YY_MOVE_OR_COPY< GenieRet* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.YY_MOVE_OR_COPY< GenieSwitch::GenieCase > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.YY_MOVE_OR_COPY< GenieType* > (YY_MOVE (that.value));
         break;
@@ -521,6 +560,7 @@ namespace genie {
         value.YY_MOVE_OR_COPY< GenieType::SumType* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.YY_MOVE_OR_COPY< char > (YY_MOVE (that.value));
         break;
@@ -530,18 +570,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.YY_MOVE_OR_COPY< std::vector<
-            GenieModule::ModuleElem> > (YY_MOVE (that.value));
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.YY_MOVE_OR_COPY< std::vector<GenieExpr> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.YY_MOVE_OR_COPY< std::vector<GenieFunction::FunctionParam> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.YY_MOVE_OR_COPY< std::vector<GenieModule::ModuleElem> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.YY_MOVE_OR_COPY< std::vector<GenieSwitch::GenieCase> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -564,15 +615,12 @@ namespace genie {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< GenieAssign* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.move< GenieBlock* > (YY_MOVE (that.value));
         break;
 
@@ -608,6 +656,14 @@ namespace genie {
         value.move< GenieModule::ModuleElem > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.move< GenieRet* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.move< GenieSwitch::GenieCase > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.move< GenieType* > (YY_MOVE (that.value));
         break;
@@ -616,6 +672,7 @@ namespace genie {
         value.move< GenieType::SumType* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.move< char > (YY_MOVE (that.value));
         break;
@@ -625,18 +682,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.move< std::string > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.move< std::vector<
-            GenieModule::ModuleElem> > (YY_MOVE (that.value));
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< std::vector<GenieExpr> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.move< std::vector<GenieFunction::FunctionParam> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.move< std::vector<GenieModule::ModuleElem> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.move< std::vector<GenieSwitch::GenieCase> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -659,15 +727,12 @@ namespace genie {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.copy< GenieAssign* > (that.value);
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.copy< GenieBlock* > (that.value);
         break;
 
@@ -703,6 +768,14 @@ namespace genie {
         value.copy< GenieModule::ModuleElem > (that.value);
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.copy< GenieRet* > (that.value);
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.copy< GenieSwitch::GenieCase > (that.value);
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.copy< GenieType* > (that.value);
         break;
@@ -711,6 +784,7 @@ namespace genie {
         value.copy< GenieType::SumType* > (that.value);
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.copy< char > (that.value);
         break;
@@ -720,18 +794,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.copy< std::string > (that.value);
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.copy< std::vector<
-            GenieModule::ModuleElem> > (that.value);
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.copy< std::vector<GenieExpr> > (that.value);
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.copy< std::vector<GenieFunction::FunctionParam> > (that.value);
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.copy< std::vector<GenieModule::ModuleElem> > (that.value);
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.copy< std::vector<GenieSwitch::GenieCase> > (that.value);
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -753,15 +838,12 @@ namespace genie {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< GenieAssign* > (that.value);
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         value.move< GenieBlock* > (that.value);
         break;
 
@@ -797,6 +879,14 @@ namespace genie {
         value.move< GenieModule::ModuleElem > (that.value);
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        value.move< GenieRet* > (that.value);
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        value.move< GenieSwitch::GenieCase > (that.value);
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         value.move< GenieType* > (that.value);
         break;
@@ -805,6 +895,7 @@ namespace genie {
         value.move< GenieType::SumType* > (that.value);
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         value.move< char > (that.value);
         break;
@@ -814,18 +905,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         value.move< std::string > (that.value);
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        value.move< std::vector<
-            GenieModule::ModuleElem> > (that.value);
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        value.move< std::vector<GenieExpr> > (that.value);
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         value.move< std::vector<GenieFunction::FunctionParam> > (that.value);
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        value.move< std::vector<GenieModule::ModuleElem> > (that.value);
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        value.move< std::vector<GenieSwitch::GenieCase> > (that.value);
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -1091,15 +1193,12 @@ namespace genie {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case symbol_kind::S_g_block: // g_block
-      case symbol_kind::S_g_switch_body: // g_switch_body
-      case symbol_kind::S_g_cases: // g_cases
-      case symbol_kind::S_g_case: // g_case
-      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
-      case symbol_kind::S_g_optional_else: // g_optional_else
       case symbol_kind::S_g_assign: // g_assign
-      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
-      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        yylhs.value.emplace< GenieAssign* > ();
+        break;
+
+      case symbol_kind::S_g_block: // g_block
+      case symbol_kind::S_g_optional_else: // g_optional_else
         yylhs.value.emplace< GenieBlock* > ();
         break;
 
@@ -1135,6 +1234,14 @@ namespace genie {
         yylhs.value.emplace< GenieModule::ModuleElem > ();
         break;
 
+      case symbol_kind::S_g_return: // g_return
+        yylhs.value.emplace< GenieRet* > ();
+        break;
+
+      case symbol_kind::S_g_case: // g_case
+        yylhs.value.emplace< GenieSwitch::GenieCase > ();
+        break;
+
       case symbol_kind::S_g_type_def: // g_type_def
         yylhs.value.emplace< GenieType* > ();
         break;
@@ -1143,6 +1250,7 @@ namespace genie {
         yylhs.value.emplace< GenieType::SumType* > ();
         break;
 
+      case symbol_kind::S_g_ignored_newlines: // g_ignored_newlines
       case symbol_kind::S_g_param_end: // g_param_end
         yylhs.value.emplace< char > ();
         break;
@@ -1152,18 +1260,29 @@ namespace genie {
       case symbol_kind::S_ID: // ID
       case symbol_kind::S_g_optional_type_decl: // g_optional_type_decl
       case symbol_kind::S_g_type_decl: // g_type_decl
+      case symbol_kind::S_g_optional_ret_type: // g_optional_ret_type
         yylhs.value.emplace< std::string > ();
         break;
 
-      case symbol_kind::S_g_module_elements: // g_module_elements
-        yylhs.value.emplace< std::vector<
-            GenieModule::ModuleElem> > ();
+      case symbol_kind::S_g_for_var_decl: // g_for_var_decl
+      case symbol_kind::S_g_fun_call_args: // g_fun_call_args
+      case symbol_kind::S_g_rest_of_fun_call_args: // g_rest_of_fun_call_args
+        yylhs.value.emplace< std::vector<GenieExpr> > ();
         break;
 
       case symbol_kind::S_g_optional_param_list: // g_optional_param_list
       case symbol_kind::S_g_param_list: // g_param_list
       case symbol_kind::S_g_rest_of_param_list: // g_rest_of_param_list
         yylhs.value.emplace< std::vector<GenieFunction::FunctionParam> > ();
+        break;
+
+      case symbol_kind::S_g_module_elements: // g_module_elements
+        yylhs.value.emplace< std::vector<GenieModule::ModuleElem> > ();
+        break;
+
+      case symbol_kind::S_g_switch_body: // g_switch_body
+      case symbol_kind::S_g_cases: // g_cases
+        yylhs.value.emplace< std::vector<GenieSwitch::GenieCase> > ();
         break;
 
       case symbol_kind::S_g_variants: // g_variants
@@ -1192,451 +1311,481 @@ namespace genie {
           switch (yyn)
             {
   case 2: // g_source: g_module_elements
-#line 92 "parser.y"
-                                                        {yylhs.value.as < GenieModule* > () = new GenieModule(yystack_[0].value.as < std::vector<
-            GenieModule::ModuleElem> > ()); mod = yylhs.value.as < GenieModule* > ();}
-#line 1199 "Genie-Parser.cpp"
-    break;
-
-  case 3: // g_module_elements: %empty
-#line 94 "parser.y"
-                                                        {yylhs.value.as < std::vector<
-            GenieModule::ModuleElem> > () = std::vector<GenieModule::ModuleElem>{};}
-#line 1206 "Genie-Parser.cpp"
-    break;
-
-  case 4: // g_module_elements: g_module_elements g_module_element
-#line 95 "parser.y"
-                                                        {yylhs.value.as < std::vector<
-            GenieModule::ModuleElem> > () = yystack_[1].value.as < std::vector<
-            GenieModule::ModuleElem> > (); yylhs.value.as < std::vector<
-            GenieModule::ModuleElem> > ().push_back(yystack_[0].value.as < GenieModule::ModuleElem > ());}
-#line 1215 "Genie-Parser.cpp"
-    break;
-
-  case 5: // g_module_element: g_expression
-#line 97 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieExpr > ());}
-#line 1221 "Genie-Parser.cpp"
-    break;
-
-  case 6: // g_module_element: g_block
-#line 98 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieBlock* > ());}
-#line 1227 "Genie-Parser.cpp"
-    break;
-
-  case 7: // g_module_element: g_data_def
-#line 99 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieData* > ());}
-#line 1233 "Genie-Parser.cpp"
-    break;
-
-  case 8: // g_module_element: g_func_def
-#line 100 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieFunction* > ());}
-#line 1239 "Genie-Parser.cpp"
-    break;
-
-  case 9: // g_module_element: g_type_def
-#line 101 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieType* > ());}
-#line 1245 "Genie-Parser.cpp"
-    break;
-
-  case 10: // g_module_element: g_assign
-#line 102 "parser.y"
-                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem();  }
-#line 1251 "Genie-Parser.cpp"
-    break;
-
-  case 11: // g_expression: g_expr G_EOL
-#line 103 "parser.y"
-                              {yylhs.value.as < GenieExpr > () = yystack_[1].value.as < GenieExpr > ();}
-#line 1257 "Genie-Parser.cpp"
-    break;
-
-  case 12: // g_expression: g_control_expr
-#line 104 "parser.y"
-                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
-#line 1263 "Genie-Parser.cpp"
-    break;
-
-  case 13: // g_any_expr: g_expr
-#line 105 "parser.y"
-                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
-#line 1269 "Genie-Parser.cpp"
-    break;
-
-  case 14: // g_any_expr: g_control_expr
-#line 106 "parser.y"
-                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
-#line 1275 "Genie-Parser.cpp"
-    break;
-
-  case 15: // g_expr: INT
-#line 108 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(GenieInt(yystack_[0].value.as < std::string > ()));}
-#line 1281 "Genie-Parser.cpp"
-    break;
-
-  case 16: // g_expr: REAL
 #line 109 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
-#line 1287 "Genie-Parser.cpp"
-    break;
-
-  case 17: // g_expr: g_expr PLUS g_expr
-#line 110 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::PLUS_OP));}
-#line 1293 "Genie-Parser.cpp"
-    break;
-
-  case 18: // g_expr: g_expr MINUS g_expr
-#line 111 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MINUS_OP)); }
-#line 1299 "Genie-Parser.cpp"
-    break;
-
-  case 19: // g_expr: g_expr MULT g_expr
-#line 112 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MULT_OP)); }
-#line 1305 "Genie-Parser.cpp"
-    break;
-
-  case 20: // g_expr: g_expr DIV g_expr
-#line 113 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::DIV_OP));}
-#line 1311 "Genie-Parser.cpp"
-    break;
-
-  case 21: // g_expr: g_expr MOD g_expr
-#line 114 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MOD_OP));}
+                                                        {yylhs.value.as < GenieModule* > () = new GenieModule(yystack_[0].value.as < std::vector<GenieModule::ModuleElem> > ()); mod = yylhs.value.as < GenieModule* > ();}
 #line 1317 "Genie-Parser.cpp"
     break;
 
-  case 22: // g_expr: g_expr EXP g_expr
-#line 115 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::EXP_OP));}
+  case 3: // g_module_elements: %empty
+#line 111 "parser.y"
+                                                        {yylhs.value.as < std::vector<GenieModule::ModuleElem> > () = std::vector<GenieModule::ModuleElem>{};}
 #line 1323 "Genie-Parser.cpp"
     break;
 
-  case 23: // g_expr: g_expr LESS_THAN g_expr
-#line 116 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 4: // g_module_elements: g_module_elements g_ignored_newlines g_module_element
+#line 112 "parser.y"
+                                                                          {yylhs.value.as < std::vector<GenieModule::ModuleElem> > () = yystack_[2].value.as < std::vector<GenieModule::ModuleElem> > (); yylhs.value.as < std::vector<GenieModule::ModuleElem> > ().push_back(yystack_[0].value.as < GenieModule::ModuleElem > ());}
 #line 1329 "Genie-Parser.cpp"
     break;
 
-  case 24: // g_expr: g_expr GREATER_THAN g_expr
-#line 117 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 5: // g_ignored_newlines: %empty
+#line 114 "parser.y"
+                                                        {yylhs.value.as < char > () = ' ';}
 #line 1335 "Genie-Parser.cpp"
     break;
 
-  case 25: // g_expr: g_expr LESS_THAN_EQ g_expr
-#line 118 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 6: // g_ignored_newlines: g_ignored_newlines G_EOL
+#line 115 "parser.y"
+                                                        {yylhs.value.as < char > () = '\n';}
 #line 1341 "Genie-Parser.cpp"
     break;
 
-  case 26: // g_expr: g_expr GREATER_THAN_EQ g_expr
-#line 119 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 7: // g_module_element: g_expression
+#line 116 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieExpr > ());}
 #line 1347 "Genie-Parser.cpp"
     break;
 
-  case 27: // g_expr: g_expr IS_EQUAL_TO g_expr
-#line 120 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 8: // g_module_element: g_block
+#line 117 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieBlock* > ());}
 #line 1353 "Genie-Parser.cpp"
     break;
 
-  case 28: // g_expr: g_expr IS_NOT_EQUAL_TO g_expr
-#line 121 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 9: // g_module_element: g_data_def
+#line 118 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieData* > ());}
 #line 1359 "Genie-Parser.cpp"
     break;
 
-  case 29: // g_expr: g_expr OR g_expr
-#line 122 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 10: // g_module_element: g_func_def
+#line 119 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieFunction* > ());}
 #line 1365 "Genie-Parser.cpp"
     break;
 
-  case 30: // g_expr: g_expr AND g_expr
-#line 123 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 11: // g_module_element: g_type_def
+#line 120 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieType* > ());}
 #line 1371 "Genie-Parser.cpp"
     break;
 
-  case 31: // g_expr: NOT g_expr
-#line 124 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 12: // g_module_element: g_assign
+#line 121 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieAssign* > ());}
 #line 1377 "Genie-Parser.cpp"
     break;
 
-  case 32: // g_expr: OPEN_PAREN g_expr CLOSED_PAREN
-#line 125 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+  case 13: // g_module_element: g_return
+#line 122 "parser.y"
+                                {yylhs.value.as < GenieModule::ModuleElem > () = GenieModule::ModuleElem(yystack_[0].value.as < GenieRet* > ());}
 #line 1383 "Genie-Parser.cpp"
     break;
 
-  case 33: // g_expr: ID OPEN_SQ_BRACKET g_fun_call_args CLOSED_SQ_BRACKET
+  case 14: // g_expression: g_expr G_EOL
 #line 128 "parser.y"
-                                       {yylhs.value.as < GenieExpr > () = GenieExpr(); }
+                              {yylhs.value.as < GenieExpr > () = yystack_[1].value.as < GenieExpr > ();}
 #line 1389 "Genie-Parser.cpp"
     break;
 
-  case 34: // g_expr: ID
+  case 15: // g_expression: g_control_expr
 #line 129 "parser.y"
-                                        {yylhs.value.as < GenieExpr > () = GenieExpr(yystack_[0].value.as < std::string > ());}
+                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
 #line 1395 "Genie-Parser.cpp"
     break;
 
-  case 35: // g_control_expr: SWITCH g_any_expr g_switch_body
-#line 131 "parser.y"
-                                                           {yylhs.value.as < GenieExpr > () = GenieExpr();}
+  case 16: // g_any_expr: g_expr
+#line 130 "parser.y"
+                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
 #line 1401 "Genie-Parser.cpp"
     break;
 
-  case 36: // g_control_expr: WHILE g_any_expr g_block
-#line 132 "parser.y"
-                                                           {yylhs.value.as < GenieExpr > () = GenieExpr();}
+  case 17: // g_any_expr: g_control_expr
+#line 131 "parser.y"
+                              {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
 #line 1407 "Genie-Parser.cpp"
     break;
 
-  case 37: // g_control_expr: REP g_block UNTIL g_expression
+  case 18: // g_expr: INT
 #line 133 "parser.y"
-                                                           {yylhs.value.as < GenieExpr > () = GenieExpr();}
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(GenieInt(yystack_[0].value.as < std::string > ())); }
 #line 1413 "Genie-Parser.cpp"
     break;
 
-  case 38: // g_control_expr: FOR g_for_var_decl g_block
+  case 19: // g_expr: REAL
 #line 134 "parser.y"
-                                                           {yylhs.value.as < GenieExpr > () = GenieExpr();}
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieReal(yystack_[0].value.as < std::string > ()));}
 #line 1419 "Genie-Parser.cpp"
     break;
 
-  case 39: // g_control_expr: IF g_any_expr g_block g_optional_else
+  case 20: // g_expr: g_expr PLUS g_expr
 #line 135 "parser.y"
-                                                           {yylhs.value.as < GenieExpr > () = GenieExpr();}
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::PLUS_OP)); }
 #line 1425 "Genie-Parser.cpp"
     break;
 
-  case 40: // g_block: OPEN_CURLY g_module_elements CLOSED_CURLY
+  case 21: // g_expr: g_expr MINUS g_expr
+#line 136 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MINUS_OP));}
+#line 1431 "Genie-Parser.cpp"
+    break;
+
+  case 22: // g_expr: g_expr MULT g_expr
 #line 137 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = new GenieBlock(yystack_[1].value.as < std::vector<
-            GenieModule::ModuleElem> > ());}
-#line 1432 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MULT_OP)); }
+#line 1437 "Genie-Parser.cpp"
     break;
 
-  case 41: // g_switch_body: OPEN_CURLY g_cases CLOSED_CURLY
+  case 23: // g_expr: g_expr DIV g_expr
+#line 138 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::DIV_OP));  }
+#line 1443 "Genie-Parser.cpp"
+    break;
+
+  case 24: // g_expr: g_expr MOD g_expr
 #line 139 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1438 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::MOD_OP));  }
+#line 1449 "Genie-Parser.cpp"
     break;
 
-  case 42: // g_cases: %empty
+  case 25: // g_expr: g_expr EXP g_expr
 #line 140 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1444 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::EXP_OP));  }
+#line 1455 "Genie-Parser.cpp"
     break;
 
-  case 43: // g_cases: g_cases g_case
+  case 26: // g_expr: g_expr LESS_THAN g_expr
 #line 141 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1450 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::LT_OP));   }
+#line 1461 "Genie-Parser.cpp"
     break;
 
-  case 44: // g_case: CASE g_any_expr g_block
+  case 27: // g_expr: g_expr GREATER_THAN g_expr
 #line 142 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1456 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::GT_OP));   }
+#line 1467 "Genie-Parser.cpp"
     break;
 
-  case 45: // g_for_var_decl: ID EQUAL g_any_expr COLON g_any_expr STEP g_any_expr
+  case 28: // g_expr: g_expr LESS_THAN_EQ g_expr
+#line 143 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::LTE_OP));  }
+#line 1473 "Genie-Parser.cpp"
+    break;
+
+  case 29: // g_expr: g_expr GREATER_THAN_EQ g_expr
 #line 144 "parser.y"
-                                                                      {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1462 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::GTE_OP));  }
+#line 1479 "Genie-Parser.cpp"
     break;
 
-  case 46: // g_optional_else: %empty
+  case 30: // g_expr: g_expr IS_EQUAL_TO g_expr
+#line 145 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::EQ_OP));   }
+#line 1485 "Genie-Parser.cpp"
+    break;
+
+  case 31: // g_expr: g_expr IS_NOT_EQUAL_TO g_expr
 #line 146 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1468 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::NEQ_OP));  }
+#line 1491 "Genie-Parser.cpp"
     break;
 
-  case 47: // g_optional_else: ELSE g_block
+  case 32: // g_expr: g_expr OR g_expr
 #line 147 "parser.y"
-                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1474 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::OR_OP));   }
+#line 1497 "Genie-Parser.cpp"
     break;
 
-  case 48: // g_assign: ID EQUAL g_expression
+  case 33: // g_expr: g_expr AND g_expr
+#line 148 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::AND_OP));  }
+#line 1503 "Genie-Parser.cpp"
+    break;
+
+  case 34: // g_expr: NOT g_expr
 #line 149 "parser.y"
-                                 {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1480 "Genie-Parser.cpp"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieBinaryExpr(yystack_[0].value.as < GenieExpr > (),GenieBinaryExpr::GenieBinaryOp::NOT_OP));     }
+#line 1509 "Genie-Parser.cpp"
     break;
 
-  case 49: // g_data_def: g_data_def_mut_spec ID g_optional_type_decl g_optional_init_expr G_EOL
+  case 35: // g_expr: OPEN_PAREN g_expr CLOSED_PAREN
+#line 150 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = yystack_[1].value.as < GenieExpr > ();}
+#line 1515 "Genie-Parser.cpp"
+    break;
+
+  case 36: // g_expr: ID OPEN_SQ_BRACKET g_fun_call_args CLOSED_SQ_BRACKET
+#line 153 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieFunCall(yystack_[3].value.as < std::string > (),yystack_[1].value.as < std::vector<GenieExpr> > ()));}
+#line 1521 "Genie-Parser.cpp"
+    break;
+
+  case 37: // g_expr: ID
+#line 154 "parser.y"
+                                        {yylhs.value.as < GenieExpr > () = GenieExpr(yystack_[0].value.as < std::string > ());}
+#line 1527 "Genie-Parser.cpp"
+    break;
+
+  case 38: // g_control_expr: SWITCH g_any_expr g_switch_body
 #line 156 "parser.y"
-                                                {yylhs.value.as < GenieData* > () = new GenieData(yystack_[4].value.as < GenieData::MutabilitySpecifier > (),yystack_[3].value.as < std::string > (),yystack_[2].value.as < std::string > (),yystack_[1].value.as < GenieExpr > ());}
-#line 1486 "Genie-Parser.cpp"
+                                                           {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieSwitch(yystack_[1].value.as < GenieExpr > (),yystack_[0].value.as < std::vector<GenieSwitch::GenieCase> > ()));}
+#line 1533 "Genie-Parser.cpp"
     break;
 
-  case 50: // g_data_def_mut_spec: VAR
+  case 39: // g_control_expr: WHILE g_any_expr g_block
+#line 157 "parser.y"
+                                                           {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieWhile(yystack_[1].value.as < GenieExpr > (),yystack_[0].value.as < GenieBlock* > ()));}
+#line 1539 "Genie-Parser.cpp"
+    break;
+
+  case 40: // g_control_expr: REP g_block UNTIL g_expression
 #line 158 "parser.y"
-                                                {yylhs.value.as < GenieData::MutabilitySpecifier > () = GenieData::MutabilitySpecifier::VAR;}
-#line 1492 "Genie-Parser.cpp"
+                                                           {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieRepUntil(yystack_[0].value.as < GenieExpr > (),yystack_[2].value.as < GenieBlock* > ()));}
+#line 1545 "Genie-Parser.cpp"
     break;
 
-  case 51: // g_data_def_mut_spec: VAL
+  case 41: // g_control_expr: FOR g_for_var_decl g_block
 #line 159 "parser.y"
-                                                {yylhs.value.as < GenieData::MutabilitySpecifier > () = GenieData::MutabilitySpecifier::VAL;}
-#line 1498 "Genie-Parser.cpp"
+                                                           {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieFor(yystack_[1].value.as < std::vector<GenieExpr> > ()[0],yystack_[1].value.as < std::vector<GenieExpr> > ()[1],yystack_[1].value.as < std::vector<GenieExpr> > ()[2],yystack_[0].value.as < GenieBlock* > ()));}
+#line 1551 "Genie-Parser.cpp"
     break;
 
-  case 52: // g_optional_type_decl: %empty
+  case 42: // g_control_expr: IF g_any_expr g_block g_optional_else
 #line 160 "parser.y"
-                                                {yylhs.value.as < std::string > () = std::string("");}
-#line 1504 "Genie-Parser.cpp"
+                                                           {yylhs.value.as < GenieExpr > () = GenieExpr(new GenieIfElse(yystack_[2].value.as < GenieExpr > (),yystack_[1].value.as < GenieBlock* > (),yystack_[0].value.as < GenieBlock* > ()));}
+#line 1557 "Genie-Parser.cpp"
     break;
 
-  case 53: // g_optional_type_decl: g_type_decl
-#line 161 "parser.y"
-                                                {yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > ();}
-#line 1510 "Genie-Parser.cpp"
+  case 43: // g_return: RETURN g_expression
+#line 165 "parser.y"
+                               {yylhs.value.as < GenieRet* > () = new GenieRet(yystack_[0].value.as < GenieExpr > ());}
+#line 1563 "Genie-Parser.cpp"
     break;
 
-  case 54: // g_type_decl: COLON ID
-#line 162 "parser.y"
-                                                {yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > ();}
-#line 1516 "Genie-Parser.cpp"
+  case 44: // g_block: OPEN_CURLY g_module_elements CLOSED_CURLY
+#line 170 "parser.y"
+                                                    {yylhs.value.as < GenieBlock* > () = new GenieBlock(yystack_[1].value.as < std::vector<GenieModule::ModuleElem> > ());}
+#line 1569 "Genie-Parser.cpp"
     break;
 
-  case 55: // g_optional_init_expr: %empty
-#line 163 "parser.y"
-                                                {yylhs.value.as < GenieExpr > () = GenieExpr();}
-#line 1522 "Genie-Parser.cpp"
+  case 45: // g_switch_body: OPEN_CURLY g_cases CLOSED_CURLY
+#line 172 "parser.y"
+                                                    {yylhs.value.as < std::vector<GenieSwitch::GenieCase> > () = yystack_[1].value.as < std::vector<GenieSwitch::GenieCase> > ();}
+#line 1575 "Genie-Parser.cpp"
     break;
 
-  case 56: // g_optional_init_expr: EQUAL g_expr
-#line 164 "parser.y"
-                                                {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
-#line 1528 "Genie-Parser.cpp"
-    break;
-
-  case 57: // g_func_def: FUN ID g_optional_param_list g_block
-#line 166 "parser.y"
-                                                  {yylhs.value.as < GenieFunction* > () = new GenieFunction(yystack_[2].value.as < std::string > (),yystack_[1].value.as < std::vector<GenieFunction::FunctionParam> > (),yystack_[0].value.as < GenieBlock* > ());}
-#line 1534 "Genie-Parser.cpp"
-    break;
-
-  case 58: // g_optional_param_list: %empty
-#line 168 "parser.y"
-                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{};}
-#line 1540 "Genie-Parser.cpp"
-    break;
-
-  case 59: // g_optional_param_list: g_param_list
-#line 169 "parser.y"
-                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ();}
-#line 1546 "Genie-Parser.cpp"
-    break;
-
-  case 60: // g_param_list: g_param g_rest_of_param_list
-#line 171 "parser.y"
-                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{yystack_[1].value.as < GenieFunction::FunctionParam > ()}; yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().insert(yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().end(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().begin(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().end());}
-#line 1552 "Genie-Parser.cpp"
-    break;
-
-  case 61: // g_rest_of_param_list: %empty
+  case 46: // g_cases: %empty
 #line 173 "parser.y"
-                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{};}
-#line 1558 "Genie-Parser.cpp"
+                                                    {yylhs.value.as < std::vector<GenieSwitch::GenieCase> > () = std::vector<GenieSwitch::GenieCase>{};}
+#line 1581 "Genie-Parser.cpp"
     break;
 
-  case 62: // g_rest_of_param_list: g_param_end g_param g_rest_of_param_list
+  case 47: // g_cases: g_cases g_case
 #line 174 "parser.y"
-                                                                {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{yystack_[1].value.as < GenieFunction::FunctionParam > ()}; yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().insert(yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().end(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().begin(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().end());}
-#line 1564 "Genie-Parser.cpp"
+                                                    {yylhs.value.as < std::vector<GenieSwitch::GenieCase> > () = yystack_[1].value.as < std::vector<GenieSwitch::GenieCase> > (); yylhs.value.as < std::vector<GenieSwitch::GenieCase> > ().push_back(yystack_[0].value.as < GenieSwitch::GenieCase > ());}
+#line 1587 "Genie-Parser.cpp"
     break;
 
-  case 63: // g_param: ID g_optional_type_decl g_optional_init_expr
-#line 176 "parser.y"
-                                                       {yylhs.value.as < GenieFunction::FunctionParam > () = GenieFunction::FunctionParam(yystack_[2].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < GenieExpr > ());}
-#line 1570 "Genie-Parser.cpp"
+  case 48: // g_case: CASE g_any_expr g_block
+#line 175 "parser.y"
+                                                    {yylhs.value.as < GenieSwitch::GenieCase > () = GenieSwitch::GenieCase(yystack_[1].value.as < GenieExpr > (),yystack_[0].value.as < GenieBlock* > ());}
+#line 1593 "Genie-Parser.cpp"
     break;
 
-  case 64: // g_param_end: G_EOL
-#line 178 "parser.y"
-                         {yylhs.value.as < char > () = ' ';}
-#line 1576 "Genie-Parser.cpp"
+  case 49: // g_for_var_decl: ID EQUAL g_any_expr COLON g_any_expr STEP g_any_expr
+#line 177 "parser.y"
+                                                                      {yylhs.value.as < std::vector<GenieExpr> > () = std::vector<GenieExpr>{yystack_[4].value.as < GenieExpr > (),yystack_[2].value.as < GenieExpr > (),yystack_[0].value.as < GenieExpr > ()};}
+#line 1599 "Genie-Parser.cpp"
     break;
 
-  case 65: // g_param_end: COMMA
+  case 50: // g_optional_else: %empty
 #line 179 "parser.y"
-                         {yylhs.value.as < char > () = ' ';}
-#line 1582 "Genie-Parser.cpp"
+                                                    {yylhs.value.as < GenieBlock* > () = nullptr;}
+#line 1605 "Genie-Parser.cpp"
     break;
 
-  case 66: // g_fun_call_args: %empty
+  case 51: // g_optional_else: ELSE g_block
 #line 180 "parser.y"
-                                                          {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1588 "Genie-Parser.cpp"
+                                                    {yylhs.value.as < GenieBlock* > () = yystack_[0].value.as < GenieBlock* > ();}
+#line 1611 "Genie-Parser.cpp"
     break;
 
-  case 67: // g_fun_call_args: g_any_expr g_rest_of_fun_call_args
-#line 181 "parser.y"
-                                                      {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1594 "Genie-Parser.cpp"
-    break;
-
-  case 68: // g_rest_of_fun_call_args: %empty
-#line 182 "parser.y"
-                                                      {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1600 "Genie-Parser.cpp"
-    break;
-
-  case 69: // g_rest_of_fun_call_args: g_param_end g_any_expr g_rest_of_fun_call_args
-#line 183 "parser.y"
-                                                                         {yylhs.value.as < GenieBlock* > () = nullptr;}
-#line 1606 "Genie-Parser.cpp"
-    break;
-
-  case 70: // g_type_def: g_sum_type
-#line 184 "parser.y"
-                                                   {yylhs.value.as < GenieType* > () = new GenieType(yystack_[0].value.as < GenieType::SumType* > ());}
-#line 1612 "Genie-Parser.cpp"
-    break;
-
-  case 71: // g_sum_type: SUM ID EQUAL g_variants
+  case 52: // g_assign: ID EQUAL g_expression
 #line 185 "parser.y"
+                                 {yylhs.value.as < GenieAssign* > () = new GenieAssign(yystack_[2].value.as < std::string > (),yystack_[0].value.as < GenieExpr > ());}
+#line 1617 "Genie-Parser.cpp"
+    break;
+
+  case 53: // g_data_def: g_data_def_mut_spec ID g_optional_type_decl g_optional_init_expr G_EOL
+#line 194 "parser.y"
+                                                {yylhs.value.as < GenieData* > () = new GenieData(yystack_[4].value.as < GenieData::MutabilitySpecifier > (),yystack_[3].value.as < std::string > (),yystack_[2].value.as < std::string > (),yystack_[1].value.as < GenieExpr > ());}
+#line 1623 "Genie-Parser.cpp"
+    break;
+
+  case 54: // g_data_def_mut_spec: VAR
+#line 196 "parser.y"
+                                                {yylhs.value.as < GenieData::MutabilitySpecifier > () = GenieData::MutabilitySpecifier::VAR;}
+#line 1629 "Genie-Parser.cpp"
+    break;
+
+  case 55: // g_data_def_mut_spec: VAL
+#line 197 "parser.y"
+                                                {yylhs.value.as < GenieData::MutabilitySpecifier > () = GenieData::MutabilitySpecifier::VAL;}
+#line 1635 "Genie-Parser.cpp"
+    break;
+
+  case 56: // g_optional_type_decl: %empty
+#line 198 "parser.y"
+                                                {yylhs.value.as < std::string > () = std::string("");}
+#line 1641 "Genie-Parser.cpp"
+    break;
+
+  case 57: // g_optional_type_decl: g_type_decl
+#line 199 "parser.y"
+                                                {yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > ();}
+#line 1647 "Genie-Parser.cpp"
+    break;
+
+  case 58: // g_type_decl: COLON ID
+#line 200 "parser.y"
+                                                {yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > ();}
+#line 1653 "Genie-Parser.cpp"
+    break;
+
+  case 59: // g_optional_init_expr: %empty
+#line 201 "parser.y"
+                                                {yylhs.value.as < GenieExpr > () = GenieExpr();}
+#line 1659 "Genie-Parser.cpp"
+    break;
+
+  case 60: // g_optional_init_expr: EQUAL g_expr
+#line 202 "parser.y"
+                                                {yylhs.value.as < GenieExpr > () = yystack_[0].value.as < GenieExpr > ();}
+#line 1665 "Genie-Parser.cpp"
+    break;
+
+  case 61: // g_func_def: FUN ID g_optional_param_list g_optional_ret_type g_block
+#line 207 "parser.y"
+                                                                      {yylhs.value.as < GenieFunction* > () = new GenieFunction(yystack_[3].value.as < std::string > (),yystack_[2].value.as < std::vector<GenieFunction::FunctionParam> > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < GenieBlock* > ());}
+#line 1671 "Genie-Parser.cpp"
+    break;
+
+  case 62: // g_optional_param_list: %empty
+#line 209 "parser.y"
+                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{};}
+#line 1677 "Genie-Parser.cpp"
+    break;
+
+  case 63: // g_optional_param_list: g_param_list
+#line 210 "parser.y"
+                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ();}
+#line 1683 "Genie-Parser.cpp"
+    break;
+
+  case 64: // g_param_list: g_param g_rest_of_param_list
+#line 212 "parser.y"
+                                                       {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{yystack_[1].value.as < GenieFunction::FunctionParam > ()}; yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().insert(yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().end(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().begin(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().end());}
+#line 1689 "Genie-Parser.cpp"
+    break;
+
+  case 65: // g_rest_of_param_list: %empty
+#line 214 "parser.y"
+                                                                {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{};}
+#line 1695 "Genie-Parser.cpp"
+    break;
+
+  case 66: // g_rest_of_param_list: g_param_end g_param g_rest_of_param_list
+#line 215 "parser.y"
+                                                                {yylhs.value.as < std::vector<GenieFunction::FunctionParam> > () = std::vector<GenieFunction::FunctionParam>{yystack_[1].value.as < GenieFunction::FunctionParam > ()}; yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().insert(yylhs.value.as < std::vector<GenieFunction::FunctionParam> > ().end(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().begin(),yystack_[0].value.as < std::vector<GenieFunction::FunctionParam> > ().end());}
+#line 1701 "Genie-Parser.cpp"
+    break;
+
+  case 67: // g_param: ID g_optional_type_decl g_optional_init_expr
+#line 217 "parser.y"
+                                                       {yylhs.value.as < GenieFunction::FunctionParam > () = GenieFunction::FunctionParam(yystack_[2].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < GenieExpr > ());}
+#line 1707 "Genie-Parser.cpp"
+    break;
+
+  case 68: // g_optional_ret_type: %empty
+#line 219 "parser.y"
+                                        {yylhs.value.as < std::string > () = "";}
+#line 1713 "Genie-Parser.cpp"
+    break;
+
+  case 69: // g_optional_ret_type: RET_TYPE_MARK ID
+#line 220 "parser.y"
+                                        {yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > ();}
+#line 1719 "Genie-Parser.cpp"
+    break;
+
+  case 70: // g_param_end: G_EOL
+#line 221 "parser.y"
+                         {yylhs.value.as < char > () = ' ';}
+#line 1725 "Genie-Parser.cpp"
+    break;
+
+  case 71: // g_param_end: COMMA
+#line 222 "parser.y"
+                         {yylhs.value.as < char > () = ' ';}
+#line 1731 "Genie-Parser.cpp"
+    break;
+
+  case 72: // g_fun_call_args: %empty
+#line 225 "parser.y"
+                                                                         {yylhs.value.as < std::vector<GenieExpr> > () = std::vector<GenieExpr>{};}
+#line 1737 "Genie-Parser.cpp"
+    break;
+
+  case 73: // g_fun_call_args: g_any_expr g_rest_of_fun_call_args
+#line 226 "parser.y"
+                                                                         {yylhs.value.as < std::vector<GenieExpr> > () = std::vector<GenieExpr>{yystack_[1].value.as < GenieExpr > ()}; yylhs.value.as < std::vector<GenieExpr> > ().insert(yylhs.value.as < std::vector<GenieExpr> > ().end(),yystack_[0].value.as < std::vector<GenieExpr> > ().begin(),yystack_[0].value.as < std::vector<GenieExpr> > ().end());}
+#line 1743 "Genie-Parser.cpp"
+    break;
+
+  case 74: // g_rest_of_fun_call_args: %empty
+#line 227 "parser.y"
+                                                                         {yylhs.value.as < std::vector<GenieExpr> > () = std::vector<GenieExpr>{};}
+#line 1749 "Genie-Parser.cpp"
+    break;
+
+  case 75: // g_rest_of_fun_call_args: g_param_end g_any_expr g_rest_of_fun_call_args
+#line 228 "parser.y"
+                                                                         {yylhs.value.as < std::vector<GenieExpr> > () = std::vector<GenieExpr>{yystack_[1].value.as < GenieExpr > ()};yylhs.value.as < std::vector<GenieExpr> > ().insert(yylhs.value.as < std::vector<GenieExpr> > ().end(),yystack_[0].value.as < std::vector<GenieExpr> > ().begin(),yystack_[0].value.as < std::vector<GenieExpr> > ().end());}
+#line 1755 "Genie-Parser.cpp"
+    break;
+
+  case 76: // g_type_def: g_sum_type
+#line 233 "parser.y"
+                                                   {yylhs.value.as < GenieType* > () = new GenieType(yystack_[0].value.as < GenieType::SumType* > ());}
+#line 1761 "Genie-Parser.cpp"
+    break;
+
+  case 77: // g_sum_type: SUM ID EQUAL g_variants
+#line 234 "parser.y"
                                                    {yylhs.value.as < GenieType::SumType* > () = new GenieType::SumType(yystack_[2].value.as < std::string > (),yystack_[0].value.as < std::vector<std::string> > ());}
-#line 1618 "Genie-Parser.cpp"
+#line 1767 "Genie-Parser.cpp"
     break;
 
-  case 72: // g_variants: ID g_more_variants
-#line 186 "parser.y"
+  case 78: // g_variants: ID g_more_variants
+#line 235 "parser.y"
                                                    {yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[1].value.as < std::string > ()}; yylhs.value.as < std::vector<std::string> > ().insert(yylhs.value.as < std::vector<std::string> > ().end(),yystack_[0].value.as < std::vector<std::string> > ().begin(),yystack_[0].value.as < std::vector<std::string> > ().end());}
-#line 1624 "Genie-Parser.cpp"
+#line 1773 "Genie-Parser.cpp"
     break;
 
-  case 73: // g_more_variants: %empty
-#line 187 "parser.y"
+  case 79: // g_more_variants: %empty
+#line 236 "parser.y"
                                                    {yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{};}
-#line 1630 "Genie-Parser.cpp"
+#line 1779 "Genie-Parser.cpp"
     break;
 
-  case 74: // g_more_variants: ALT ID g_more_variants G_EOL
-#line 188 "parser.y"
+  case 80: // g_more_variants: ALT ID g_more_variants G_EOL
+#line 237 "parser.y"
                                                    {yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[2].value.as < std::string > ()}; yylhs.value.as < std::vector<std::string> > ().insert(yylhs.value.as < std::vector<std::string> > ().end(),yystack_[1].value.as < std::vector<std::string> > ().begin(),yystack_[1].value.as < std::vector<std::string> > ().end());}
-#line 1636 "Genie-Parser.cpp"
+#line 1785 "Genie-Parser.cpp"
     break;
 
 
-#line 1640 "Genie-Parser.cpp"
+#line 1789 "Genie-Parser.cpp"
 
             default:
               break;
@@ -1829,179 +1978,178 @@ namespace genie {
 
 
 
-  const signed char GenieParser::yypact_ninf_ = -76;
+  const signed char GenieParser::yypact_ninf_ = -66;
 
-  const signed char GenieParser::yytable_ninf_ = -1;
+  const signed char GenieParser::yytable_ninf_ = -3;
 
   const short
   GenieParser::yypact_[] =
   {
-     -76,     8,   241,   -76,    19,   -76,   -76,   -76,   -29,   -21,
-     259,   259,     6,   259,   -18,   -76,   -76,     1,    19,   -76,
-     -76,    96,   -76,   -76,   -76,   -76,   -15,   -76,   -76,   -76,
-      11,   111,   219,   -10,    10,    16,   139,   -76,     6,     2,
-       6,    20,     6,   259,   259,    40,    19,    19,    19,    19,
-      19,    19,   -76,    19,    19,    19,    19,    19,    19,    19,
-      19,    21,   -76,   -76,    21,     6,   -76,   -13,     4,   -76,
-     -76,   -76,   259,    14,   259,   -76,   -13,    24,   -76,     5,
-       5,    35,    35,    35,    35,   154,   162,   182,   182,   182,
-     182,   182,   182,    23,    37,   -76,    37,   -76,   -76,   -76,
-     -76,   -10,    38,   -76,    -7,   -76,     6,   -76,    41,   259,
-     -76,   -76,   -76,    19,    29,   -76,   -13,    34,   -76,   -76,
-     259,   -76,   -76,   259,   -13,   139,   -76,   -76,    38,     6,
-      55,   -76,    56,   -76,   259,   -76,   -76
+     -66,     9,    18,   -66,   204,     1,   -66,   -66,   -66,   -16,
+     -15,   224,   224,   224,    14,   224,   -12,   -66,   -66,   -66,
+       4,     1,   -66,   -66,    91,   -66,   -66,   -66,   -66,   -66,
+      -9,   -66,   -66,   -66,    15,   100,    19,    -8,    12,   -66,
+      22,   145,   -66,    14,    11,    14,    28,    14,   224,   224,
+     159,     1,     1,     1,     1,     1,     1,   -66,     1,     1,
+       1,     1,     1,     1,     1,     1,    29,   -66,   -66,    29,
+      23,   -66,   -10,    10,   -66,   -66,   -66,   224,    21,   224,
+     -66,   -10,    43,   -66,     7,     7,    61,    61,    61,    61,
+     153,   159,   165,   165,   165,   165,   165,   165,    31,    55,
+     -66,    55,    33,    14,   -66,   -66,   -66,    -8,    51,   -66,
+       8,   -66,    14,   -66,    59,   224,   -66,   -66,   -66,     1,
+      42,   -66,   -66,   -66,   -10,    40,   -66,   -66,   224,   -66,
+     -66,   224,   -10,   145,   -66,   -66,    51,    14,    46,   -66,
+      47,   -66,   224,   -66,   -66
   };
 
   const signed char
   GenieParser::yydefact_[] =
   {
-       3,     0,     2,     1,     0,     3,    50,    51,     0,     0,
-       0,     0,     0,     0,     0,    15,    16,    34,     0,     4,
-       5,     0,    12,     6,    10,     7,     0,     8,     9,    70,
-      34,     0,     0,    58,     0,     0,    13,    14,     0,     0,
-       0,     0,     0,    66,     0,    31,     0,     0,     0,     0,
-       0,     0,    11,     0,     0,     0,     0,     0,     0,     0,
-       0,    52,    32,    40,    52,     0,    59,    61,     0,    42,
-      35,    36,     0,    46,     0,    38,    68,     0,    48,    17,
-      18,    19,    20,    22,    21,    29,    30,    23,    24,    25,
-      26,    27,    28,     0,    55,    53,    55,    57,    65,    64,
-      60,     0,    73,    71,     0,    37,     0,    39,     0,     0,
-      67,    33,    54,     0,     0,    63,    61,     0,    72,    41,
-       0,    43,    47,     0,    68,    56,    49,    62,    73,     0,
-       0,    69,     0,    44,     0,    74,    45
+       3,     0,     5,     1,     0,     0,     3,    54,    55,     0,
+       0,     0,     0,     0,     0,     0,     0,     6,    18,    19,
+      37,     0,     4,     7,     0,    15,    13,     8,    12,     9,
+       0,    10,    11,    76,    37,     0,     5,    62,     0,    43,
+       0,    16,    17,     0,     0,     0,     0,     0,    72,     0,
+      34,     0,     0,     0,     0,     0,     0,    14,     0,     0,
+       0,     0,     0,     0,     0,     0,    56,    35,    44,    56,
+      68,    63,    65,     0,    46,    38,    39,     0,    50,     0,
+      41,    74,     0,    52,    20,    21,    22,    23,    25,    24,
+      32,    33,    26,    27,    28,    29,    30,    31,     0,    59,
+      57,    59,     0,     0,    71,    70,    64,     0,    79,    77,
+       0,    40,     0,    42,     0,     0,    73,    36,    58,     0,
+       0,    67,    69,    61,    65,     0,    78,    45,     0,    47,
+      51,     0,    74,    60,    53,    66,    79,     0,     0,    75,
+       0,    48,     0,    80,    49
   };
 
   const signed char
   GenieParser::yypgoto_[] =
   {
-     -76,   -76,    82,   -76,   -38,   -11,    18,     7,    -9,   -76,
-     -76,   -76,   -76,   -76,   -76,   -76,   -76,    25,   -76,    -5,
-     -76,   -76,   -76,   -24,    -8,   -75,   -76,   -30,   -76,   -76,
-     -76,   -33
+     -66,   -66,    74,   -66,   -66,    -5,   -13,     0,    -3,   -66,
+     -11,   -66,   -66,   -66,   -66,   -66,   -66,   -66,   -66,    13,
+     -66,   -18,   -66,   -66,   -66,   -40,   -22,   -66,   -65,   -66,
+     -46,   -66,   -66,   -66,   -49
   };
 
-  const signed char
+  const unsigned char
   GenieParser::yydefgoto_[] =
   {
-       0,     1,     2,    19,    20,    35,    36,    37,    23,    70,
-     104,   121,    42,   107,    24,    25,    26,    94,    95,   114,
-      27,    65,    66,   100,    67,   101,    77,   110,    28,    29,
-     103,   118
+       0,     1,     2,     4,    22,    23,    40,    41,    42,    26,
+      27,    75,   110,   129,    47,   113,    28,    29,    30,    99,
+     100,   120,    31,    70,    71,   106,    72,   103,   107,    82,
+     116,    32,    33,   109,   126
   };
 
   const short
   GenieParser::yytable_[] =
   {
-      38,   109,    40,    39,    98,   119,    78,    33,     3,    22,
-      48,    49,    50,    51,    43,    34,    44,     5,    41,    99,
-      21,    61,    31,   120,    43,    68,    64,    69,     4,    71,
-      72,    73,    76,    75,   105,    74,    45,    93,   111,    22,
-     102,   106,    50,    46,    47,    48,    49,    50,    51,   109,
-      21,    22,   113,    15,    16,    30,    97,   123,    18,   112,
-     117,   126,    21,   108,    79,    80,    81,    82,    83,    84,
-     128,    85,    86,    87,    88,    89,    90,    91,    92,    22,
-      55,    56,    57,    58,    59,    60,   134,    32,   135,    96,
-      21,   115,   127,   116,   131,   132,     0,   122,   124,    46,
-      47,    48,    49,    50,    51,     0,     0,     0,     0,   129,
-       0,     0,   130,     0,    46,    47,    48,    49,    50,    51,
-     133,    62,     0,   136,     0,     0,     0,     0,    52,     0,
-       0,   125,     0,    53,    54,     0,    55,    56,    57,    58,
-      59,    60,    46,    47,    48,    49,    50,    51,    53,    54,
-       0,    55,    56,    57,    58,    59,    60,    46,    47,    48,
-      49,    50,    51,     0,     0,    46,    47,    48,    49,    50,
-      51,     0,     0,     0,     0,     0,    53,    54,     0,    55,
-      56,    57,    58,    59,    60,    46,    47,    48,    49,    50,
-      51,    -1,    54,     0,    55,    56,    57,    58,    59,    60,
-      -1,     0,    55,    56,    57,    58,    59,    60,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    -1,    -1,    -1,    -1,    -1,    -1,     4,     0,
-       5,    63,     0,     0,     0,     0,     0,     6,     7,     8,
-       9,     0,    10,    11,    12,    13,     0,     0,    14,     0,
-       4,     0,     5,    15,    16,    17,     0,     0,    18,     6,
-       7,     8,     9,     0,    10,    11,    12,    13,     4,     0,
-      14,     0,     0,     0,     0,    15,    16,    17,     0,     0,
-      18,     0,    10,    11,    12,    13,     0,     0,    14,     0,
-       0,     0,     0,    15,    16,    30,     0,     0,    18
+      43,    25,    45,    44,    24,    35,    39,   104,    25,     3,
+       5,    24,    53,    54,    55,    56,   115,    48,    -2,    49,
+     127,    50,    37,    38,   105,     6,    46,    73,    48,    66,
+      69,    68,    76,    74,    78,    81,    80,    18,    19,    34,
+     128,    77,    21,    79,    83,    98,    25,   102,   108,    24,
+     112,    84,    85,    86,    87,    88,    89,   117,    90,    91,
+      92,    93,    94,    95,    96,    97,   114,   115,    55,   118,
+     119,   122,   111,   125,    25,   131,   134,    24,   136,   142,
+      36,   143,   101,   121,   135,   124,   139,   140,     0,     0,
+       0,     0,   123,     0,    51,    52,    53,    54,    55,    56,
+       0,   130,   132,    51,    52,    53,    54,    55,    56,     0,
+      67,     0,     0,     0,     0,   137,     0,     0,   138,   133,
+       0,     0,     0,     0,     0,    57,   141,     0,     0,   144,
+      58,    59,     0,    60,    61,    62,    63,    64,    65,    58,
+      59,     0,    60,    61,    62,    63,    64,    65,    51,    52,
+      53,    54,    55,    56,     0,     0,    51,    52,    53,    54,
+      55,    56,    51,    52,    53,    54,    55,    56,    51,    52,
+      53,    54,    55,    56,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    58,    59,     0,    60,    61,    62,
+      63,    64,    65,    59,     0,    60,    61,    62,    63,    64,
+      65,    60,    61,    62,    63,    64,    65,    -3,    -3,    -3,
+      -3,    -3,    -3,     5,     0,     6,     0,     0,     0,     0,
+       0,     0,     7,     8,     9,    10,     0,    11,     0,    12,
+      13,    14,    15,     5,     0,    16,     0,     0,    17,     0,
+      18,    19,    20,     0,     0,    21,     0,     0,     0,    12,
+      13,    14,    15,     0,     0,    16,     0,     0,     0,     0,
+      18,    19,    34,     0,     0,    21
   };
 
   const short
   GenieParser::yycheck_[] =
   {
-      11,    76,    13,    12,    17,    12,    44,    36,     0,     2,
-       5,     6,     7,     8,    13,    36,    15,    11,    36,    32,
-       2,    36,     4,    30,    13,    15,    36,    11,     9,    38,
-      28,    40,    43,    42,    72,    15,    18,    16,    14,    32,
-      36,    27,     7,     3,     4,     5,     6,     7,     8,   124,
-      32,    44,    15,    34,    35,    36,    65,    16,    39,    36,
-      22,    32,    44,    74,    46,    47,    48,    49,    50,    51,
-      36,    53,    54,    55,    56,    57,    58,    59,    60,    72,
-      40,    41,    42,    43,    44,    45,    31,     5,    32,    64,
-      72,    96,   116,   101,   124,   128,    -1,   106,   109,     3,
-       4,     5,     6,     7,     8,    -1,    -1,    -1,    -1,   120,
-      -1,    -1,   123,    -1,     3,     4,     5,     6,     7,     8,
-     129,    10,    -1,   134,    -1,    -1,    -1,    -1,    32,    -1,
-      -1,   113,    -1,    37,    38,    -1,    40,    41,    42,    43,
-      44,    45,     3,     4,     5,     6,     7,     8,    37,    38,
-      -1,    40,    41,    42,    43,    44,    45,     3,     4,     5,
-       6,     7,     8,    -1,    -1,     3,     4,     5,     6,     7,
-       8,    -1,    -1,    -1,    -1,    -1,    37,    38,    -1,    40,
-      41,    42,    43,    44,    45,     3,     4,     5,     6,     7,
-       8,    37,    38,    -1,    40,    41,    42,    43,    44,    45,
-      38,    -1,    40,    41,    42,    43,    44,    45,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    40,    41,    42,    43,    44,    45,     9,    -1,
-      11,    12,    -1,    -1,    -1,    -1,    -1,    18,    19,    20,
-      21,    -1,    23,    24,    25,    26,    -1,    -1,    29,    -1,
-       9,    -1,    11,    34,    35,    36,    -1,    -1,    39,    18,
-      19,    20,    21,    -1,    23,    24,    25,    26,     9,    -1,
-      29,    -1,    -1,    -1,    -1,    34,    35,    36,    -1,    -1,
-      39,    -1,    23,    24,    25,    26,    -1,    -1,    29,    -1,
-      -1,    -1,    -1,    34,    35,    36,    -1,    -1,    39
+      13,     4,    15,    14,     4,     5,    11,    17,    11,     0,
+       9,    11,     5,     6,     7,     8,    81,    13,     0,    15,
+      12,    21,    38,    38,    34,    11,    38,    15,    13,    38,
+      38,    12,    43,    11,    45,    48,    47,    36,    37,    38,
+      32,    30,    41,    15,    49,    16,    49,    24,    38,    49,
+      29,    51,    52,    53,    54,    55,    56,    14,    58,    59,
+      60,    61,    62,    63,    64,    65,    79,   132,     7,    38,
+      15,    38,    77,    22,    77,    16,    34,    77,    38,    33,
+       6,    34,    69,   101,   124,   107,   132,   136,    -1,    -1,
+      -1,    -1,   103,    -1,     3,     4,     5,     6,     7,     8,
+      -1,   112,   115,     3,     4,     5,     6,     7,     8,    -1,
+      10,    -1,    -1,    -1,    -1,   128,    -1,    -1,   131,   119,
+      -1,    -1,    -1,    -1,    -1,    34,   137,    -1,    -1,   142,
+      39,    40,    -1,    42,    43,    44,    45,    46,    47,    39,
+      40,    -1,    42,    43,    44,    45,    46,    47,     3,     4,
+       5,     6,     7,     8,    -1,    -1,     3,     4,     5,     6,
+       7,     8,     3,     4,     5,     6,     7,     8,     3,     4,
+       5,     6,     7,     8,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    39,    40,    -1,    42,    43,    44,
+      45,    46,    47,    40,    -1,    42,    43,    44,    45,    46,
+      47,    42,    43,    44,    45,    46,    47,    42,    43,    44,
+      45,    46,    47,     9,    -1,    11,    -1,    -1,    -1,    -1,
+      -1,    -1,    18,    19,    20,    21,    -1,    23,    -1,    25,
+      26,    27,    28,     9,    -1,    31,    -1,    -1,    34,    -1,
+      36,    37,    38,    -1,    -1,    41,    -1,    -1,    -1,    25,
+      26,    27,    28,    -1,    -1,    31,    -1,    -1,    -1,    -1,
+      36,    37,    38,    -1,    -1,    41
   };
 
   const signed char
   GenieParser::yystos_[] =
   {
-       0,    47,    48,     0,     9,    11,    18,    19,    20,    21,
-      23,    24,    25,    26,    29,    34,    35,    36,    39,    49,
-      50,    52,    53,    54,    60,    61,    62,    66,    74,    75,
-      36,    52,    48,    36,    36,    51,    52,    53,    51,    54,
-      51,    36,    58,    13,    15,    52,     3,     4,     5,     6,
-       7,     8,    32,    37,    38,    40,    41,    42,    43,    44,
-      45,    36,    10,    12,    36,    67,    68,    70,    15,    11,
-      55,    54,    28,    54,    15,    54,    51,    72,    50,    52,
-      52,    52,    52,    52,    52,    52,    52,    52,    52,    52,
-      52,    52,    52,    16,    63,    64,    63,    54,    17,    32,
-      69,    71,    36,    76,    56,    50,    27,    59,    51,    71,
-      73,    14,    36,    15,    65,    65,    70,    22,    77,    12,
-      30,    57,    54,    16,    51,    52,    32,    69,    36,    51,
-      51,    73,    77,    54,    31,    32,    51
+       0,    49,    50,     0,    51,     9,    11,    18,    19,    20,
+      21,    23,    25,    26,    27,    28,    31,    34,    36,    37,
+      38,    41,    52,    53,    55,    56,    57,    58,    64,    65,
+      66,    70,    79,    80,    38,    55,    50,    38,    38,    53,
+      54,    55,    56,    54,    58,    54,    38,    62,    13,    15,
+      55,     3,     4,     5,     6,     7,     8,    34,    39,    40,
+      42,    43,    44,    45,    46,    47,    38,    10,    12,    38,
+      71,    72,    74,    15,    11,    59,    58,    30,    58,    15,
+      58,    54,    77,    53,    55,    55,    55,    55,    55,    55,
+      55,    55,    55,    55,    55,    55,    55,    55,    16,    67,
+      68,    67,    24,    75,    17,    34,    73,    76,    38,    81,
+      60,    53,    29,    63,    54,    76,    78,    14,    38,    15,
+      69,    69,    38,    58,    74,    22,    82,    12,    32,    61,
+      58,    16,    54,    55,    34,    73,    38,    54,    54,    78,
+      82,    58,    33,    34,    54
   };
 
   const signed char
   GenieParser::yyr1_[] =
   {
-       0,    46,    47,    48,    48,    49,    49,    49,    49,    49,
-      49,    50,    50,    51,    51,    52,    52,    52,    52,    52,
-      52,    52,    52,    52,    52,    52,    52,    52,    52,    52,
-      52,    52,    52,    52,    52,    53,    53,    53,    53,    53,
-      54,    55,    56,    56,    57,    58,    59,    59,    60,    61,
-      62,    62,    63,    63,    64,    65,    65,    66,    67,    67,
-      68,    69,    69,    70,    71,    71,    72,    72,    73,    73,
-      74,    75,    76,    77,    77
+       0,    48,    49,    50,    50,    51,    51,    52,    52,    52,
+      52,    52,    52,    52,    53,    53,    54,    54,    55,    55,
+      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
+      55,    55,    55,    55,    55,    55,    55,    55,    56,    56,
+      56,    56,    56,    57,    58,    59,    60,    60,    61,    62,
+      63,    63,    64,    65,    66,    66,    67,    67,    68,    69,
+      69,    70,    71,    71,    72,    73,    73,    74,    75,    75,
+      76,    76,    77,    77,    78,    78,    79,    80,    81,    82,
+      82
   };
 
   const signed char
   GenieParser::yyr2_[] =
   {
-       0,     2,     1,     0,     2,     1,     1,     1,     1,     1,
-       1,     2,     1,     1,     1,     1,     1,     3,     3,     3,
+       0,     2,     1,     0,     3,     0,     2,     1,     1,     1,
+       1,     1,     1,     1,     2,     1,     1,     1,     1,     1,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     2,     3,     4,     1,     3,     3,     4,     3,     4,
-       3,     3,     0,     2,     3,     7,     0,     2,     3,     5,
-       1,     1,     0,     1,     2,     0,     2,     4,     0,     1,
-       2,     0,     3,     3,     1,     1,     0,     2,     0,     3,
-       1,     4,     2,     0,     4
+       3,     3,     3,     3,     2,     3,     4,     1,     3,     3,
+       4,     3,     4,     2,     3,     3,     0,     2,     3,     7,
+       0,     2,     3,     5,     1,     1,     0,     1,     2,     0,
+       2,     5,     0,     1,     2,     0,     3,     3,     0,     2,
+       1,     1,     0,     2,     0,     3,     1,     4,     2,     0,
+       4
   };
 
 
@@ -2014,17 +2162,18 @@ namespace genie {
   "\"end of file\"", "error", "\"invalid token\"", "PLUS", "MINUS",
   "MULT", "DIV", "EXP", "MOD", "OPEN_PAREN", "CLOSED_PAREN", "OPEN_CURLY",
   "CLOSED_CURLY", "OPEN_SQ_BRACKET", "CLOSED_SQ_BRACKET", "EQUAL", "COLON",
-  "COMMA", "VAR", "VAL", "FUN", "SUM", "ALT", "SWITCH", "WHILE", "REP",
-  "IF", "ELSE", "UNTIL", "FOR", "CASE", "STEP", "G_EOL", "UNKNOWN", "INT",
-  "REAL", "ID", "OR", "AND", "NOT", "LESS_THAN", "GREATER_THAN",
-  "LESS_THAN_EQ", "GREATER_THAN_EQ", "IS_EQUAL_TO", "IS_NOT_EQUAL_TO",
-  "$accept", "g_source", "g_module_elements", "g_module_element",
-  "g_expression", "g_any_expr", "g_expr", "g_control_expr", "g_block",
-  "g_switch_body", "g_cases", "g_case", "g_for_var_decl",
-  "g_optional_else", "g_assign", "g_data_def", "g_data_def_mut_spec",
-  "g_optional_type_decl", "g_type_decl", "g_optional_init_expr",
-  "g_func_def", "g_optional_param_list", "g_param_list",
-  "g_rest_of_param_list", "g_param", "g_param_end", "g_fun_call_args",
+  "COMMA", "VAR", "VAL", "FUN", "SUM", "ALT", "RETURN", "RET_TYPE_MARK",
+  "SWITCH", "WHILE", "REP", "IF", "ELSE", "UNTIL", "FOR", "CASE", "STEP",
+  "G_EOL", "UNKNOWN", "INT", "REAL", "ID", "OR", "AND", "NOT", "LESS_THAN",
+  "GREATER_THAN", "LESS_THAN_EQ", "GREATER_THAN_EQ", "IS_EQUAL_TO",
+  "IS_NOT_EQUAL_TO", "$accept", "g_source", "g_module_elements",
+  "g_ignored_newlines", "g_module_element", "g_expression", "g_any_expr",
+  "g_expr", "g_control_expr", "g_return", "g_block", "g_switch_body",
+  "g_cases", "g_case", "g_for_var_decl", "g_optional_else", "g_assign",
+  "g_data_def", "g_data_def_mut_spec", "g_optional_type_decl",
+  "g_type_decl", "g_optional_init_expr", "g_func_def",
+  "g_optional_param_list", "g_param_list", "g_rest_of_param_list",
+  "g_param", "g_optional_ret_type", "g_param_end", "g_fun_call_args",
   "g_rest_of_fun_call_args", "g_type_def", "g_sum_type", "g_variants",
   "g_more_variants", YY_NULLPTR
   };
@@ -2035,14 +2184,15 @@ namespace genie {
   const unsigned char
   GenieParser::yyrline_[] =
   {
-       0,    92,    92,    94,    95,    97,    98,    99,   100,   101,
-     102,   103,   104,   105,   106,   108,   109,   110,   111,   112,
-     113,   114,   115,   116,   117,   118,   119,   120,   121,   122,
-     123,   124,   125,   126,   129,   131,   132,   133,   134,   135,
-     137,   139,   140,   141,   142,   144,   146,   147,   149,   152,
-     158,   159,   160,   161,   162,   163,   164,   166,   168,   169,
-     171,   173,   174,   176,   178,   179,   180,   181,   182,   183,
-     184,   185,   186,   187,   188
+       0,   109,   109,   111,   112,   114,   115,   116,   117,   118,
+     119,   120,   121,   122,   128,   129,   130,   131,   133,   134,
+     135,   136,   137,   138,   139,   140,   141,   142,   143,   144,
+     145,   146,   147,   148,   149,   150,   151,   154,   156,   157,
+     158,   159,   160,   165,   170,   172,   173,   174,   175,   177,
+     179,   180,   185,   190,   196,   197,   198,   199,   200,   201,
+     202,   207,   209,   210,   212,   214,   215,   217,   219,   220,
+     221,   222,   225,   226,   227,   228,   233,   234,   235,   236,
+     237
   };
 
   void
@@ -2111,10 +2261,10 @@ namespace genie {
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45
+      45,    46,    47
     };
     // Last valid token kind.
-    const int code_max = 300;
+    const int code_max = 302;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2126,9 +2276,9 @@ namespace genie {
 
 #line 20 "parser.y"
 } // genie
-#line 2130 "Genie-Parser.cpp"
+#line 2280 "Genie-Parser.cpp"
 
-#line 189 "parser.y"
+#line 238 "parser.y"
 
 void genie::GenieParser::error(const location_type& t,const std::string& msg) {
     std::cerr << msg <<" at line "<<t.begin.line<<'\n';

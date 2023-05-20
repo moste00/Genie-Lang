@@ -22,9 +22,10 @@ namespace genie {
             void free();
         };
         std::vector<FunctionParam> params;
+        std::string ret_type;
         GenieBlock* body;
 
-        GenieFunction(std::string,std::vector<FunctionParam>&,GenieBlock*);
+        GenieFunction(std::string,std::vector<FunctionParam>&,std::string,GenieBlock*);
 
         void free();
     };

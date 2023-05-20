@@ -3,7 +3,7 @@
 #include "../Genie-ParserInvoker.h"
 
 namespace genie {
-    class BisonInvoker : ParserInvoker {
+    class BisonInvoker : public ParserInvoker {
     public:
         void add_file(const string &string1) override;
 
