@@ -1,0 +1,4 @@
+var q = 1
+repeat {
+    q = q*2
+} until q is 2000

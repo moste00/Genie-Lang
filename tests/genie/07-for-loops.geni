@@ -1,0 +1,4 @@
+var y : int
+for x = 1:100 step x+y {
+    y = 5
+}

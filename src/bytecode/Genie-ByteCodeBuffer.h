@@ -30,6 +30,8 @@ namespace genie {
 
                         CONDBRANCH2,NONCONDBRANCH,TRUTHYCONDBRANCH1,FALSEYCONDBRANCH1,
 
+                        CALL,RET,
+
                         NOP,RAISEHALT
                     } opcode_t;
                     int info;
@@ -78,6 +80,10 @@ namespace genie {
                 static const int INFO_BRANCH2_THIRD_SRC_ARG_LOCAL_SCOPE_REGISTER    = 0x100000;
                 static const int INFO_BRANCH2_THIRD_SRC_ARG_GLOBAL_SCOPE_REGISTER   = 0x200000;
                 static const int INFO_BRANCH2_THIRD_SRC_ARG_ARGUMENT_SCOPE_REGISTER = 0x400000;
+
+                static const int INFO_RET_WITH_SRC = 0x20000;
+
+                static const int INFO_CALL_IS_VOID = 0x20000;
         };
         vector<Entry> buffer;
 
@@ -98,5 +104,9 @@ namespace genie {
         std::stringstream serialize_third_src(int info, Entry &entry);
 
         std::stringstream serialize_jump_target(int info, Entry &entry, const std::unordered_map<size_t, std::string> &map);
+
+        static std::string serialize_ret_src_if_present(const vector<Entry> &vector1, size_t &i);
+
+        static std::string serialize_function_call(const vector<Entry>&, size_t&,const std::unordered_map<size_t, std::string>&);
     };
 }

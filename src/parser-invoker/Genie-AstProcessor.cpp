@@ -8,9 +8,14 @@ namespace genie {
         process_complex_mod = [](auto) {};
 
         process_enum = [](auto) {};
+
         process_data_declaration = [](auto) {};
+
+        preprocess_function = [](auto){};
         process_function = [](auto) {};
+
         process_block = [](auto) {};
+        postprocess_block = [](auto){};
 
         process_int = [](auto) {};
         process_real = [](auto) {};
@@ -26,10 +31,20 @@ namespace genie {
         postprocess_caseexpr_preprocess_casebody = [](auto,auto){};
         postprocess_casebody_preprcocess_nextcase = [](auto,auto){};
 
+        preprocess_while = [](auto){};
+        postprocess_whilecond_preprocess_whilebody = [](auto) {};
         process_while = [](auto) {};
 
         process_for = [](auto) {};
+        postprocess_forstart_preprocess_forend = [](auto) {};
+        postprocess_forend_preprocess_forbody  = [](auto) {};
+        postprocess_forbody_preprocess_forstep = [](auto) {};
+        preprocess_for = [](auto){};
 
+        preprocess_rep_until = [](auto){};
         process_rep_until = [](auto) {};
+
+        process_funcall = [](auto){};
+        process_ret = [](auto){};
     }
 }

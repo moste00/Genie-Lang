@@ -49,6 +49,14 @@ namespace genie {
                 function_ast_for_each(elem.e.function, p);
                 break;
             }
+            case GenieModule::ModuleElem::Type::ASSIGN: {
+                assignment_ast_for_each(elem.e.assignment,p);
+                break;
+            }
+            case GenieModule::ModuleElem::Type::RET: {
+                ret_ast_for_each(elem.e.ret,p);
+                break;
+            }
         }
     }
 
@@ -73,15 +81,24 @@ namespace genie {
                 break;
             }
             case GenieExpr::GenieExprType::FOR_TYPE: {
+                processor.preprocess_for(expr.e.as_for);
                 expr_ast_for_each(expr.e.as_for->start,processor);
+                processor.postprocess_forstart_preprocess_forend(expr.e.as_for);
+
                 expr_ast_for_each(expr.e.as_for->end,processor);
-                expr_ast_for_each(expr.e.as_for->step,processor);
+                processor.postprocess_forend_preprocess_forbody(expr.e.as_for);
+
                 block_ast_for_each(expr.e.as_for->body,processor);
+                processor.postprocess_forbody_preprocess_forstep(expr.e.as_for);
+
+                expr_ast_for_each(expr.e.as_for->step,processor);
                 processor.process_for(expr.e.as_for);
                 break;
             }
             case GenieExpr::GenieExprType::WHILE_TYPE: {
+                processor.preprocess_while(expr.e.as_while);
                 expr_ast_for_each(expr.e.as_while->cond,processor);
+                processor.postprocess_whilecond_preprocess_whilebody(expr.e.as_while);
                 block_ast_for_each(expr.e.as_while->body,processor);
                 processor.process_while(expr.e.as_while);
                 break;
@@ -118,6 +135,7 @@ namespace genie {
                 break;
             }
             case GenieExpr::GenieExprType::REPUNTIL_TYPE: {
+                processor.preprocess_rep_until(expr.e.as_repuntil);
                 block_ast_for_each(expr.e.as_repuntil->body,processor);
                 expr_ast_for_each(expr.e.as_repuntil->cond,processor);
                 processor.process_rep_until(expr.e.as_repuntil);
@@ -126,6 +144,12 @@ namespace genie {
             case GenieExpr::GenieExprType::NONE_TYPE: {
                 break;
             }
+            case GenieExpr::GenieExprType::FUNCALL_TYPE:
+                for(const auto & arg : expr.e.as_funcall->args) {
+                    expr_ast_for_each(arg,processor);
+                }
+                processor.process_funcall(expr.e.as_funcall);
+                break;
         }
     }
 
@@ -142,14 +166,27 @@ namespace genie {
 
     void ParserInvoker::block_ast_for_each(GenieBlock* block, AstProcessor& processor) {
         if (!block) return;
+        processor.process_block(block);
         for(GenieModule::ModuleElem elem : block->elems) {
             dispatch_mod_elem(elem,processor);
         }
+        processor.postprocess_block(block);
     }
 
     void ParserInvoker::function_ast_for_each(GenieFunction* function, AstProcessor& processor) {
         if (!function) return;
+        processor.preprocess_function(function);
         block_ast_for_each(function->body,processor);
         processor.process_function(function);
+    }
+
+    void ParserInvoker::assignment_ast_for_each(GenieAssign* assign,AstProcessor& processor) {
+        expr_ast_for_each(assign->rhs,processor);
+        processor.process_assignment(assign);
+    }
+
+    void ParserInvoker::ret_ast_for_each(GenieRet* ret, AstProcessor& processor) {
+        expr_ast_for_each(ret->e,processor);
+        processor.process_ret(ret);
     }
 }

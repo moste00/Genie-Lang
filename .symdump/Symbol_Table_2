@@ -1,0 +1,8 @@
+digraph Symbol_Table_2 {
+ label="Symbol_Table_2";
+"var z | Additional Info :Type=bool -- 
+val y | Additional Info :Type=real -- 
+var x | Additional Info :Type=int -- 
+"
+
+}

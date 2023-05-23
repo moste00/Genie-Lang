@@ -6,8 +6,8 @@
 #include <vector>
 
 namespace genie {
-    struct Scope {
-        struct AdditionalInfo {};
+    struct GenieScope {
+        struct AdditionalInfo { virtual std::string serialize() = 0; };
 
         struct FuncInfo {
             GenieFunction* func;
@@ -24,14 +24,15 @@ namespace genie {
         std::unordered_map<std::string, FuncInfo> functions;
         std::unordered_map<std::string, EnumInfo> enums;
 
-        Scope* parent;
-        Scope* prev;
-        Scope* next;
-        Scope* first_child;
+        GenieScope* parent;
+        GenieScope* prev;
+        GenieScope* next;
+        GenieScope* first_child;
 
         //for iteration
-        Scope* curr_child;
-        Scope() {
+        GenieScope* curr_child;
+
+        GenieScope() {
             parent = nullptr;
             prev = nullptr;
             next = nullptr;

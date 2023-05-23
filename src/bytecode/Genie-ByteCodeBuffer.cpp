@@ -7,6 +7,7 @@ namespace genie {
             "(==", "(!==", "(>","(<","(>=","(<=",
             "(&&","(||","(~",
             "(if","goto","(if","(if not",
+            "call","ret",
             "(","(RAISE-FATAL"
     };
     std::string GenieByteCodeBuffer::serialize_to_lisp(const std::unordered_map<size_t,std::string>& buffer_poses_to_labels) {
@@ -72,6 +73,16 @@ namespace genie {
                 case Entry::OpCode::OpCodeType::NOP:
                 case Entry::OpCode::OpCodeType::RAISEHALT:
                     lisp_str << op_as_str << ")\n";
+                    break;
+                case Entry::OpCode::OpCodeType::RET:
+                    lisp_str << op_as_str << " ";
+                    lisp_str << serialize_ret_src_if_present(buffer,i);
+                    lisp_str << ")\n";
+                    break;
+                case Entry::OpCode::OpCodeType::CALL:
+                    lisp_str << op_as_str << " ";
+                    lisp_str << serialize_function_call(buffer,i,buffer_poses_to_labels);
+                    lisp_str << ")\n";
                     break;
             }
         }
@@ -182,5 +193,41 @@ namespace genie {
         else {
             return serialize_first_src(info,entry);
         }
+    }
+
+    std::string GenieByteCodeBuffer::serialize_ret_src_if_present(const vector<Entry>& buffer, size_t& i) {
+        auto ret = buffer[i];
+        if (ret.opcode.info & Entry::INFO_RET_WITH_SRC) {
+            i++;
+            return serialize_first_src(ret.opcode.info,buffer[i]).str();
+        }
+        else return "";
+    }
+
+    std::string GenieByteCodeBuffer::serialize_function_call(const vector<Entry>& buffer, size_t& i,
+                                                             const std::unordered_map<size_t, std::string>& buffer_poses_to_labels) {
+        std::stringstream call_string;
+        auto call = buffer[i];
+        auto call_target = buffer[i+1];
+        call_string << buffer_poses_to_labels.find(((size_t)call_target.ll_arg))->second;
+
+        auto call_count = buffer[i+2];
+        if (call_count.ll_arg != 0) {
+            call_string << " on ";
+            for (size_t argi = 0; argi < ((size_t)call_count.ll_arg); argi++) {
+                auto arg_info = buffer[i+2+ 2*argi +1];
+                auto arg_id = buffer[i+2+ 2*argi +2];
+                call_string << serialize_first_src(arg_info.ll_arg,arg_id).str();
+            }
+        }
+        if (call.opcode.info & GenieByteCodeBuffer::Entry::INFO_CALL_IS_VOID) {
+            return call_string.str();
+        }
+
+        auto ret_reg = buffer[i+2+ 2*((size_t)call_count.ll_arg) +1];
+        call_string << " :-> "<< serialize_dest(call.opcode.info,ret_reg).str();
+
+        i += 2 + 2*((size_t)call_count.ll_arg) + 1;
+        return call_string.str();
     }
 }

@@ -8,7 +8,9 @@ namespace genie {
     //No other modules of the Genie toolchain should know anything about parsing or where the AST comes from,
     // the only thing they ever need to know is that they can call a parser invoker to get an AST,
     // and that this parser invoker needs to stay in scope as long as the AST is in use
+    //-----------------------------------------------------------------------------------------------------------------------------
     //The ParserInvoker additionally handles collecting simple modules (files) into the complex module they declare (if any)
+    //-----------------------------------------------------------------------------------------------------------------------------
     //Finally, the ParserInvoker exposes an AST walking mechanism, given an AstProcessor to ast_for_each
     class ParserInvoker {
     protected:
@@ -36,6 +38,10 @@ namespace genie {
         virtual void function_ast_for_each(GenieFunction*, AstProcessor& processor);
 
         virtual void dispatch_mod_elem(GenieModule::ModuleElem& elem,AstProcessor& p);
+
+        virtual void assignment_ast_for_each(GenieAssign *assign, AstProcessor& processor);
+
+        void ret_ast_for_each(GenieRet *ret, AstProcessor &processor);
     };
 
 

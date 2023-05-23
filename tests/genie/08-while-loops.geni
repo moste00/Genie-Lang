@@ -1,0 +1,12 @@
+var y = 96
+while y < 12 and 5 > 69 {
+    val x = 5
+    val w = 12
+
+    if w < x {
+        x = w
+    }
+    else {
+        w = x
+    }
+}

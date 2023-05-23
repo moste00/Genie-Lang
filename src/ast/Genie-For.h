@@ -5,11 +5,12 @@
 
 namespace genie {
     struct GenieFor {
+        std::string var;
         GenieExpr start;
         GenieExpr end;
         GenieExpr step;
         GenieBlock* body;
 
-        GenieFor(const GenieExpr&,const GenieExpr&, const GenieExpr&,GenieBlock*);
+        GenieFor(const std::string&,const GenieExpr&,const GenieExpr&, const GenieExpr&,GenieBlock*);
     };
 }

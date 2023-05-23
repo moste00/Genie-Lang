@@ -38,8 +38,8 @@ add_executable(Genie
 
                 "src/bytecode/Genie-ByteCodeBuffer.cpp"
                 "src/bytecode/Genie-ByteCodeEmitter.cpp"
-                "src/symbol-table/Scope.cpp"
-                "src/symbol-table/SymbolTable.cpp"
-                )
+                "src/symbol-table/Genie-Scope.cpp"
+                "src/symbol-table/Genie-SymbolTable.cpp"
+        src/semantic-analyzer/Genie-SemanticAnalyzer.cpp src/semantic-analyzer/Genie-SemanticAnalyzer.h)
 
 target_link_libraries(Genie "/usr/local/lib/libgmp.a" "/usr/local/lib/libgmpxx.a")

@@ -1,0 +1,5 @@
+fun myfunction x:real, y:real -> int {
+    ^x+y
+}
+
+1 + myfunction[5,6]

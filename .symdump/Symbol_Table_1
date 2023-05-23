@@ -1,0 +1,11 @@
+digraph Symbol_Table_1 {
+ label="Symbol_Table_1";
+"var y | Additional Info :Type=int -- 
+"
+"var y | Additional Info :Type=int -- 
+" -> "var x | Additional Info :Type=int -- 
+"
+"var x | Additional Info :Type=int -- 
+"
+
+}

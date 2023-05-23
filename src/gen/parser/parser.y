@@ -156,7 +156,7 @@ g_expr : INT                            {$$ = GenieExpr(GenieInt($1)); }
 g_control_expr : SWITCH g_any_expr g_switch_body           {$$ = GenieExpr(new GenieSwitch($2,$3));}
                | WHILE  g_any_expr g_block                 {$$ = GenieExpr(new GenieWhile($2,$3));}
                | REP g_block UNTIL g_expression            {$$ = GenieExpr(new GenieRepUntil($4,$2));}
-               | FOR g_for_var_decl g_block                {$$ = GenieExpr(new GenieFor($2[0],$2[1],$2[2],$3));}
+               | FOR ID EQUAL g_for_var_decl g_block       {$$ = GenieExpr(new GenieFor($2,$4[0],$4[1],$4[2],$5));}
                | IF g_any_expr g_block g_optional_else     {$$ = GenieExpr(new GenieIfElse($2,$3,$4));}
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ g_cases : %empty                                    {$$ = std::vector<GenieSwitc
         | g_cases g_case                            {$$ = $1; $$.push_back($2);}
 g_case : CASE g_any_expr g_block                    {$$ = GenieSwitch::GenieCase($2,$3);}
 
-g_for_var_decl : ID EQUAL g_any_expr COLON g_any_expr STEP g_any_expr {$$ = std::vector<GenieExpr>{$3,$5,$7};}
+g_for_var_decl : g_any_expr COLON g_any_expr STEP g_any_expr {$$ = std::vector<GenieExpr>{$1,$3,$5};}
 
 g_optional_else : %empty                            {$$ = nullptr;}
                 | ELSE g_block                      {$$ = $2;}

@@ -1,0 +1,9 @@
+(mov 1 :-> i%0 )
+(mov i%0 :-> i%1 )
+:repeatuntil!!!94327128627328:
+(mov 2 :-> i%2 )
+(* i%1 i%2 :-> i$0 )
+(mov i$0 :-> i%1 )
+(mov 2000 :-> i%3 )
+(== i%1 i%3 :-> i$1 )
+(if not i$1 then goto repeatuntil!!!94327128627328 )

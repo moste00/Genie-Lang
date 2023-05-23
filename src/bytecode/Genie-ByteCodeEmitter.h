@@ -1,6 +1,7 @@
 #include "Genie-ByteCodeBuffer.h"
 #include <stack>
 #include <unordered_map>
+#include <sstream>
 
 namespace genie {
     class GenieByteCodeEmitter {
@@ -12,12 +13,19 @@ namespace genie {
             friend class GenieByteCodeEmitter;
             RegId(int inf,int i) : info(inf), id(i) {};
         public:
+            std::string to_str() {
+                std::stringstream s;
+                s << id;
+                return s.str();
+            }
             RegId() {};
         };
     private:
         GenieByteCodeBuffer bytecode;
         std::stack<long long> local_int_next_valid_id;
         std::stack<long long> local_real_next_valid_id;
+        std::stack<long long> arg_int_next_valid_id;
+        std::stack<long long> arg_real_next_valid_id;
         long long global_int_next_valid_id;
         long long global_real_next_valid_id;
         std::unordered_map<std::string,size_t> labels_to_buffer_poses;
@@ -63,19 +71,30 @@ namespace genie {
         RegId emit_integer_literal_mov(GenieInt,MovType);
         RegId emit_real_literal_mov(GenieReal*,MovType);
         RegId emit_binary_instruction(RegId reg1,RegId reg2,GenieBinaryExpr::GenieBinaryOp op);
+        RegId emit_reg_mov(RegId,MovType);
+        void emit_reg_mov(RegId,RegId);
+        void register_label(std::string);
+        void emit_2way_conditional_branch(RegId, std::string, std::string);
+        void set_label_to_curr_buffer_pos(std::string);
+        void emit_unconditional_branch(std::string);
+        void emit_1way_falsey_conditional_branch(RegId,std::string);
 
         std::string serialize_bytecode_to_lisp() {
             return bytecode.serialize_to_lisp(buffer_poses_to_labels);
         }
 
-        void register_label(std::string);
+        RegId mk_arg_reg(string type);
 
-        void emit_2way_conditional_branch(RegId, std::string, std::string);
+        void enter_function();
 
-        void set_label_to_curr_buffer_pos(std::string);
+        void leave_function();
 
-        void emit_unconditional_branch(std::string);
+        void register_if_not_already_registered(string label);
 
-        void emit_1way_falsey_conditional_branch(RegId,std::string);
+        void emit_no_op();
+        void emit_ret(RegId &id);
+        void emit_ret();
+
+        RegId emit_function_call(std::string label, const vector<RegId> &regs, const std::string &return_type);
     };
 }

@@ -1,0 +1,10 @@
+:FUNCTION_myfunction!!!94135275464976:
+()
+(+ r@0 r@1 :-> r$0 )
+ret r$0)
+:ENDFUNCTION_myfunction!!!94135275464976:
+(mov 1 :-> i%0 )
+(mov 5 :-> i%1 )
+(mov 6 :-> i%2 )
+call FUNCTION_myfunction!!!94135275464976 on i%1 i%2 :-> i@0)
+(+ i%0 i$0 :-> i$1 )
